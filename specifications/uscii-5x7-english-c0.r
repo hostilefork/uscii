@@ -475,20 +475,24 @@ overrideData: [
 		code: 16
 		name: "Data Link Escape"
 		abbr: "DLE"
-		; Cause the following octets to be interpreted as raw data, not as
-		; control codes or graphic characters. Returning to normal usage would
-		; be implementation dependent.
+		description: {
+			Cause the following octets to be interpreted as raw data, not as
+			control codes or graphic characters. Returning to normal usage would
+			be implementation dependent.
+		}
 		image: [
-			; A "chain" or link?  Infinity symbol, maybe, to suggest opening
-			; the door to a new data world?  Both would apply.  reverse video
 			"XXXXX"
 			"XXXXX"
 			"  X  "
-			" XXX "
+			" X X "
 			"  X  "
 			"XXXXX"
 			"XXXXX"
 		]
+		notes: {
+			A "chain" or link?  Infinity symbol, maybe, to suggest opening
+			the door to a new data world?  Both would apply.  reverse video
+		}
 		rating: 'fair
 	] [		
 		code: 17
