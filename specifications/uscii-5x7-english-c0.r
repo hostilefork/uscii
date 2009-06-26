@@ -44,7 +44,7 @@ REBOL [
 	
 		http://en.wikipedia.org/wiki/Arecibo_message
 		
-	5x7-ENGLISH-C0 has pictoral representations of *all* ASCII characters&mdash;
+	5x7-ENGLISH-C0 has pictoral representations of *all* ASCII characters--
 	which include the uppercase and lowercase English alphabet, numbers, and
 	some symbols...as well as the "C0 control codes":
 	
