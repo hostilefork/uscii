@@ -1,43 +1,43 @@
 REBOL [
-    Title: {"Arecibo Ascii Generator"}
-    Purpose: "Generates Charset USCII-5x7-ENGLISH-C0"
-    Description: { A USCII system ("Universal Standard Coding for Intergalactic
-    Information"--pronounced "you-ski") is a method of embedding 2-D visual
-    representations of letters, numbers, and control signals into the coded
-    numbers agreed upon to represent them.
-    
-    For instance, instead of using 65 for A and 66 for B as ASCII does...we 
-    might consider using 15621226033 for A and 16400753439 for B.  The reason
-    this could be interesting is that when converted into binary, these are:
-    
-     	15621226033 (base 10) = 01110100011000110001111111000110001 (base 2)
-    	16400753439 (base 10) = 11110100011000111110100011000111110 (base 2)
+	Title: {"Arecibo Ascii Generator"}
+	Purpose: "Generates Charset USCII-5x7-ENGLISH-C0"
+	Description: { A USCII system ("Universal Standard Coding for Intergalactic
+	Information"--pronounced "you-ski") is a method of embedding 2-D visual
+	representations of letters, numbers, and control signals into the coded
+	numbers agreed upon to represent them.
+
+	For instance, instead of using 65 for A and 66 for B as ASCII does...we 
+	might consider using 15621226033 for A and 16400753439 for B.  The reason
+	this could be interesting is that when converted into binary, these are:
+
+		15621226033 (base 10) = 01110100011000110001111111000110001 (base 2)
+		16400753439 (base 10) = 11110100011000111110100011000111110 (base 2)
     	
-    When transmitted in a medium which hints at the significance of a 35-bit
-    pattern, the semiprime nature of that number hints at factoring it into
-    5 and 7 to make a rectangle of those dimensions.  If we do, then it will
-    reveal the letters they represent as a picture:
-    
-    	01110100011000110001111111000110001:
-    	
-    		01110
-    		10001
-    		10001
-    		10001 => "A"
-    		11111
-    		10001
-    		10001
-    		
-    	11110100011000111110100011000111110:
-    	
-    		11110
-    		10001
-    		10001
-    		11110 => "B"
-    		10001
-    		10001
-    		11110
-    
+	When transmitted in a medium which hints at the significance of a 35-bit
+	pattern, the semiprime nature of that number hints at factoring it into
+	5 and 7 to make a rectangle of those dimensions.  If we do, then it will
+	reveal the letters they represent as a picture:
+
+	01110100011000110001111111000110001:
+
+			01110
+			10001
+			10001
+			10001 => "A"
+			11111
+			10001
+			10001
+
+	11110100011000111110100011000111110:
+
+			11110
+			10001
+			10001
+			11110 => "B"
+			10001
+			10001
+			11110
+
 	This script generates a *draft* of the USCII variation "5x7-ENGLISH-C0".
 	I've informally labeled this standard "Arecibo Ascii" as an homage to SETI's
 	Arecibo Message, which employed a similar strategy:
@@ -52,39 +52,39 @@ REBOL [
 		
 	It is therefore possible to losslessly convert a stream of ASCII characters
 	into USCII-5x7-ENGLISH-C0 and back.
-    }
+	}
 
-    Author: "Hostile Fork"
-    Home: http://hostilefork.com/uscii/
-    License: gpl ; GPL Version 3
+	Author: "Hostile Fork"
+	Home: http://hostilefork.com/uscii/
+	License: gpl ; GPL Version 3
 
-    File: %uscii-5x7-english-c0.r
-    Date: 24-Jun-2009
-    Version: 0.1.1
+	File: %uscii-5x7-english-c0.r
+	Date: 24-Jun-2009
+	Version: 0.1.1
 
-    ; Header conventions: http://www.rebol.org/one-click-submission-help.r
-    Type: fun
-    Level: intermediate
-    
-    Usage: { Just run the script using a REBOL/View version 2 interpreter.  Get
-    one here:
-    
-    	http://rebol.com/download.html
-    	
-    The script will print versions of the Arecibo Ascii table in a format for
-    the web (HTML table) as well as a version to use in Javascript code.  With
-    just a little bit of REBOL know-how, you can make other outputs as well...
-    }
+	; Header conventions: http://www.rebol.org/one-click-submission-help.r
+	Type: fun
+	Level: intermediate
 
-    History: [
-        0.1.0 [20-Oct-2008 {Initial version created to decode PIC CPU font
-        and make table for HostileFork.com blog.  Not released to general
-        public.} "Fork"]
+	Usage: { Just run the script using a REBOL/View version 2 interpreter.  Get
+	one here:
 
-        0.1.1 [24-Jun-2009 {Reorganized to support the easy addition and
-        tweaking of characters for the C0 control codes.  Modified for REBOL.org
-        header conventions, but working draft placed on GitHub.} "Fork"]
-    ]
+		http://rebol.com/download.html
+
+	The script will print versions of the Arecibo Ascii table in a format for
+	the web (HTML table) as well as a version to use in Javascript code.  With
+	just a little bit of REBOL know-how, you can make other outputs as well...
+	}
+
+	History: [
+	0.1.0 [20-Oct-2008 {Initial version created to decode PIC CPU font
+	and make table for HostileFork.com blog.  Not released to general
+	public.} "Fork"]
+
+	0.1.1 [24-Jun-2009 {Reorganized to support the easy addition and
+	tweaking of characters for the C0 control codes.  Modified for REBOL.org
+	header conventions, but working draft placed on GitHub.} "Fork"]
+	]
 ]
 
 overrideData: [
