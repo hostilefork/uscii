@@ -1,8 +1,8 @@
 REBOL [
 	Title: {"Arecibo Ascii Generator"}
-	Purpose: "Generates Charset USCII-5x7-ENGLISH-C0"
-	Description: { A USCII system ("Universal Standard Coding for Intergalactic
-	Information"--pronounced "you-ski") is a method of embedding 2-D visual
+	Purpose: "Generates Character Set USCII-5x7-ENGLISH-C0"
+	Description: { A USCII system ("Universal Semiotic Coding for Information
+	Interchange"--pronounced "you-ski") is a method of embedding 2-D visual
 	representations of letters, numbers, and control signals into the coded
 	numbers agreed upon to represent them.
 
