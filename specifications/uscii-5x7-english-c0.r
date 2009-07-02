@@ -12,7 +12,7 @@ REBOL [
 
 		15621226033 (base 10) = 01110100011000110001111111000110001 (base 2)
 		16400753439 (base 10) = 11110100011000111110100011000111110 (base 2)
-    	
+
 	When transmitted in a medium which hints at the significance of a 35-bit
 	pattern, the semiprime nature of that number hints at factoring it into
 	5 and 7 to make a rectangle of those dimensions.  If we do, then it will
@@ -41,15 +41,15 @@ REBOL [
 	This script generates a *draft* of the USCII variation "5x7-ENGLISH-C0".
 	I've informally labeled this standard "Arecibo Ascii" as an homage to SETI's
 	Arecibo Message, which employed a similar strategy:
-	
+
 		http://en.wikipedia.org/wiki/Arecibo_message
-		
+
 	5x7-ENGLISH-C0 has pictoral representations of *all* ASCII characters--
 	which include the uppercase and lowercase English alphabet, numbers, and
 	some symbols...as well as the "C0 control codes":
-	
+
 		http://en.wikipedia.org/wiki/C0_and_C1_control_codes
-		
+
 	It is therefore possible to losslessly convert a stream of ASCII characters
 	into USCII-5x7-ENGLISH-C0 and back.
 	}
@@ -1151,12 +1151,16 @@ print-for-javascript: function [
 ] [
 	print "/* Javascript format of Arecibo ASCII Table */"
 	print make-header "/*" "*/"
-	print "var AreciboAsciiTable = {"
+	print "var AreciboAscii = {"
+	print rejoin [{^-name: "} "USCII-5x7-ENGLISH-C0" {",}]
+	print rejoin [{^-version: "} system/script/header/version {",}]
+	print rejoin [{^-date: "} system/script/header/date  {",}]
+	print rejoin [{^-bitstrings: [}]
 	curChar: 0
 	foreach areciboObject areciboTable [
 		lastChar?: curChar = ((length? areciboTable) - 1)
 		print rejoin [
-			"^-" ; tab character in REBOL
+			"^-^-" ; tab character in REBOL
 			either (in areciboObject 'bitstring) [
 				rejoin [{"} areciboObject/bitstring {"}]
 			] [
@@ -1167,11 +1171,13 @@ print-for-javascript: function [
 		]
 		curChar: curChar + 1
 	]
+	print "^-]"
 	print "};"
 ]
 
 ;
-; Generates images of the characters
+; Generates images of the characters and the CSS sprite of all of them
+; http://css-tricks.com/css-sprites/
 ;
 ; See REBOL's image documentation here:
 ; 	http://www.rebol.com/docs/image.html
@@ -1179,32 +1185,75 @@ print-for-javascript: function [
 generate-all-image-files: function [
 	areciboTable
 	directory
+	scaleFactors [block!] "block of scaled versions to create"
 ] [
-	areciboObject curChar img imgIndex filename
+	areciboObject curChar scaleFactor
+	img imgIndex imgAll imgAllIndex
+	directoryForScale filename filenameMeter filenameAll
 ] [
-	if not exists? directory [
-		make-dir directory
-	]
-	 
-	curChar: 0
-	foreach areciboObject areciboTable [
-		if (in areciboObject 'bitstring) [
-			img: make image! [5x7]
-			img/alpha: 0 ; make entire image opaque
-			imgIndex: 1
-			foreach bit areciboObject/bitstring [
-				either (bit == #"1") [
-					poke img imgIndex black
-				] [
-					poke img imgIndex white
-				]
-				imgIndex: imgIndex + 1
-			]
-			filename: to-file reduce [directory rejoin [curChar ".png"]] 
-			print ["Writing" areciboObject/bitstring "to: " filename]
-			save/png filename img 
+	foreach scale scaleFactors [
+		print ["Generating images for scale factor:" scale]
+		directoryForScale: to-file reduce [directory rejoin ["x" (to-string scale)]]
+		
+		if not exists? directoryForScale [
+			make-dir/deep directoryForScale
 		]
-		curChar: curChar + 1
+
+		imgAll: make image! to-pair reduce [5 * scale ((length? areciboTable) * 7) * scale]
+		imgAll/alpha: 0 ; make entire image opaque
+		imgAllIndex: 1
+
+		curChar: 0
+		foreach areciboObject areciboTable [
+			if (in areciboObject 'bitstring) [
+				img: make image! to-pair reduce [(5 * scale) (7 * scale)]
+				img/rgb: red ; make it easier to see mistakes in draw code as red
+				img/alpha: 0 ; make entire image opaque
+				imgIndex: 1
+
+				bitRow: 0 
+				bitCol:	0		
+				foreach bit areciboObject/bitstring [
+					color: either (bit == #"1") [black] [white]
+					change/dup skip img (to-pair reduce [
+						(bitCol * scale) (bitRow * scale)
+					]) color to-pair reduce [
+						(scale) (scale)
+					]
+					change/dup skip imgAll (to-pair reduce [
+						(bitCol * scale) ((bitRow + (curChar * 7)) * scale)
+					]) color to-pair reduce [
+						(scale) (scale)
+					]
+										
+					imgIndex: imgIndex + 1
+					imgAllIndex: imgAllIndex + 1
+					bitCol: bitCol + 1
+					if (bitCol == (5)) [
+						bitRow: bitRow + 1
+						bitCol: 0
+					]
+				]
+				filename: to-file reduce [directoryForScale rejoin [curChar ".png"]] 
+				print ["Writing" areciboObject/bitstring "to: " clean-path filename]
+				save/png filename img 
+			]
+			curChar: curChar + 1
+		]
+		
+		filenameAll: to-file reduce [directoryForScale "all.png"]
+		print ["Writing all images to single CSS sprite: " clean-path filename]
+		save/png filenameAll imgAll
+		
+		; The condition of "all bits set" is reserved for setting up the "meter",
+		; e.g. helping to hint at the significance of the 35 bit pattern.  This
+		; cannot be used inside of the signal.
+		imgMeter: make image! [5x7]
+		img/alpha: 0 ; set all image opaque
+		img/rgb: black ; set all image black
+		filenameMeter: to-file reduce [directoryForScale "meter.png"]
+		print ["Writing meter to: " clean-path filenameMeter]
+		save/png filenameMeter imgMeter
 	]
 ]
 
@@ -1227,7 +1276,7 @@ print-arecibo-ascii-table: function [
 
 	print-output-separator
 
-	generate-all-image-files areciboTable %./5x7/
+	generate-all-image-files areciboTable %./images/5x7/ [1 4]
 
 	print-output-separator
 		
