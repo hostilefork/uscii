@@ -1,42 +1,43 @@
 REBOL [
 	Title: {"Arecibo Ascii Generator"}
 	Purpose: "Generates Character Set USCII-5x7-ENGLISH-C0"
-	Description: { A USCII system ("Universal Semiotic Coding for Information
-	Interchange"--pronounced "you-ski") is a method of embedding 2-D visual
-	representations of letters, numbers, and control signals into the coded
-	numbers agreed upon to represent them.
+	Description: { A USCII system ("Universal Semiotic Coding for
+		Information Interchange"--pronounced "you-ski") is a method of
+		embedding 2-D visual representations of letters, numbers, and
+		control signals into the coded numbers agreed upon to represent them.
 
-	For instance, instead of using 65 for A and 66 for B as ASCII does...we 
-	might consider using 15621226033 for A and 16400753439 for B.  The reason
-	this could be interesting is that when converted into binary, these are:
+		For instance, instead of using 65 for A and 66 for B as ASCII does...
+		we might consider using 15621226033 for A and 16400753439 for B.  The
+		reason this could be interesting is that when converted into binary,
+		these are:
 
 		15621226033 (base 10) = 01110100011000110001111111000110001 (base 2)
 		16400753439 (base 10) = 11110100011000111110100011000111110 (base 2)
 
-	When transmitted in a medium which hints at the significance of a 35-bit
-	pattern, the semiprime nature of that number hints at factoring it into
-	5 and 7 to make a rectangle of those dimensions.  If we do, then it will
-	reveal the letters they represent as a picture:
+		When transmitted in a medium which hints at the significance of a
+		35-bit pattern, the semiprime nature of that number hints at factoring
+		it into 5 and 7 to make a rectangle of those dimensions.  If we do,
+		then it will reveal the letters they represent as a picture:
 
-	01110100011000110001111111000110001:
+		01110100011000110001111111000110001:
 
-			01110
-			10001
-			10001
-			10001 => "A"
-			11111
-			10001
-			10001
+			0 1 1 1 0
+			1 0 0 0 1
+			1 0 0 0 1
+			1 0 0 0 1 => "A"
+			1 1 1 1 1
+			1 0 0 0 1
+			1 0 0 0 1
 
-	11110100011000111110100011000111110:
+		11110100011000111110100011000111110:
 
-			11110
-			10001
-			10001
-			11110 => "B"
-			10001
-			10001
-			11110
+			1 1 1 1 0
+			1 0 0 0 1
+			1 0 0 0 1
+			1 1 1 1 0 => "B"
+			1 0 0 0 1
+			1 0 0 0 1
+			1 1 1 1 0
 
 	This script generates a *draft* of the USCII variation "5x7-ENGLISH-C0".
 	I've informally labeled this standard "Arecibo Ascii" as an homage to SETI's
@@ -66,31 +67,41 @@ REBOL [
 	Type: fun
 	Level: intermediate
 
-	Usage: { Just run the script using a REBOL/View version 2 interpreter.  Get
-	one here:
+	Usage: { Just run the script using a REBOL/View version 2 interpreter.
+		Get one here:
 
 		http://rebol.com/download.html
 
-	The script will print versions of the Arecibo Ascii table in a format for
-	the web (HTML table) as well as a version to use in Javascript code.  With
-	just a little bit of REBOL know-how, you can make other outputs as well...
+		The script will print versions of the Arecibo Ascii table in a format
+		for the web (HTML table) as well as a version to use in Javascript 
+		code.  With just a little bit of REBOL know-how, you can make other
+		outputs as well...
 	}
 
 	History: [
-	0.1.0 [20-Oct-2008 {Initial version created to decode PIC CPU font
-	and make table for HostileFork.com blog.  Not released to general
-	public.} "Fork"]
+		0.1.0 [20-Oct-2008 {Initial version created to decode PIC CPU font
+		and make table for HostileFork.com blog.  Not released to general
+		public.} "Fork"]
 
-	0.1.1 [24-Jun-2009 {Reorganized to support the easy addition and
-	tweaking of characters for the C0 control codes.  Modified for REBOL.org
-	header conventions, but working draft placed on GitHub.} "Fork"]
+		0.1.1 [24-Jun-2009 {Reorganized to support the easy addition and
+		tweaking of characters for the C0 control codes.  Modified for 
+		REBOL.org header conventions, but working draft placed on GitHub.}
+		"Fork"]
+	
+		0.2.0 [20-Dec-2010 {Moved from using bytes for PIC font to actually
+		representing character images so they could be customized.} "Fork"]
 	]
 ]
 
-overrideData: [
-	; Overridden characters in Arecibo ASCII-35 standard
+allSymbolData: [
+	; Characters in Arecibo ASCII-35 standard
 	; Names from http://en.wikipedia.org/wiki/ASCII#ASCII_control_characters
 	; Labels from http://en.wikipedia.org/wiki/C0_and_C1_control_codes
+	
+	; The 5x7 printable characters were originally from the Font Code for 
+	; PIC CPU Assemblers:
+	;     http://www.noritake-itron.com/Softview/fontspic.htm
+	; Character modifications are noted in the comments.
 	
 	; Though some of these are going to look pretty bad, my attempt is to
 	; derive the graphics from symbols that could also be used in higher 
@@ -856,6 +867,1040 @@ overrideData: [
 		]
 		rating: 'good
 	] [
+		code: 33
+		image: [
+			"  X  "
+			"  X  "
+			"  X  "
+			"  X  "
+			"     "
+			"     "
+			"  X  "
+		]
+	] [
+		code: 34
+		image: [
+			" X X "
+			" X X "
+			" X X "
+			"     "
+			"     "
+			"     "
+			"     "
+		]
+	] [
+		code: 35
+		image: [
+			" X X "
+			" X X "
+			"XXXXX"
+			" X X "
+			"XXXXX"
+			" X X "
+			" X X "
+		]
+	] [
+		code: 36
+		image: [
+			"  X  "
+			" XXXX"
+			"X X  "
+			" XXX "
+			"  X X"
+			"XXXX "
+			"  X  "
+		]
+	] [
+		code: 37
+		image: [
+			"XX   "
+			"XX  X"
+			"   X "
+			"  X  "
+			" X   "
+			"X  XX"
+			"   XX"
+		]
+	] [
+		code: 38
+		image: [
+			" XX  "
+			"X  X "
+			"X X  "
+			" X   "
+			"X X X"
+			"X  X "
+			" XX X"
+		]
+	] [
+		code: 39
+		image: [
+			" XX  "
+			"  X  "
+			" X   "
+			"     "
+			"     "
+			"     "
+			"     "
+		]
+	] [
+		code: 40
+		image: [
+			"   X "
+			"  X  "
+			" X   "
+			" X   "
+			" X   "
+			"  X  "
+			"   X "
+		]
+	] [
+		code: 41
+		image: [
+			" X   "
+			"  X  "
+			"   X "
+			"   X "
+			"   X "
+			"  X  "
+			" X   "
+		]
+	] [
+		code: 42
+		image: [
+			"     "
+			"  X  "
+			"X X X"
+			" XXX "
+			"X X X"
+			"  X  "
+			"     "
+		]
+	] [
+		code: 43
+		image: [
+			"     "
+			"  X  "
+			"  X  "
+			"XXXXX"
+			"  X  "
+			"  X  "
+			"     "
+		]
+	] [
+		code: 44
+		image: [
+			"     "
+			"     "
+			"     "
+			"     "
+			" XX  "
+			"  X  "
+			" X   "
+		]
+	] [
+		code: 45
+		image: [
+			"     "
+			"     "
+			"     "
+			"XXXXX"
+			"     "
+			"     "
+			"     "
+		]
+	] [
+		code: 46
+		image: [
+			"     "
+			"     "
+			"     "
+			"     "
+			"     "
+			" XX  "
+			" XX  "
+		]
+	] [
+		code: 47
+		image: [
+			"     "
+			"    X"
+			"   X "
+			"  X  "
+			" X   "
+			"X    "
+			"     "
+		]
+	] [
+		code: 48
+		image: [
+			" XXX "
+			"X   X"
+			"X  XX"
+			"X X X"
+			"XX  X"
+			"X   X"
+			" XXX "
+		]
+	] [
+		code: 49
+		image: [
+			"  X  "
+			" XX  "
+			"  X  "
+			"  X  "
+			"  X  "
+			"  X  "
+			" XXX "
+		]
+	] [
+		code: 50
+		image: [
+			" XXX "
+			"X   X"
+			"    X"
+			"   X "
+			"  X  "
+			" X   "
+			"XXXXX"
+		]
+	] [
+		code: 51
+		image: [
+			"XXXXX"
+			"   X "
+			"  X  "
+			"   X "
+			"    X"
+			"X   X"
+			" XXX "
+		]
+	] [
+		code: 52
+		image: [
+			"   X "
+			"  XX "
+			" X X "
+			"X  X "
+			"XXXXX"
+			"   X "
+			"   X "
+		]
+	] [
+		code: 53
+		image: [
+			"XXXXX"
+			"X    "
+			"XXXX "
+			"    X"
+			"    X"
+			"X   X"
+			" XXX "
+		]
+	] [
+		code: 54
+		image: [
+			"  XX "
+			" X   "
+			"X    "
+			"XXXX "
+			"X   X"
+			"X   X"
+			" XXX "
+		]
+	] [
+		code: 55
+		image: [
+			"XXXXX"
+			"    X"
+			"   X "
+			"  X  "
+			" X   "
+			" X   "
+			" X   "
+		]
+	] [
+		code: 56
+		image: [
+			" XXX "
+			"X   X"
+			"X   X"
+			" XXX "
+			"X   X"
+			"X   X"
+			" XXX "
+		]
+	] [
+		code: 57
+		image: [
+			" XXX "
+			"X   X"
+			"X   X"
+			" XXXX"
+			"    X"
+			"   X "
+			" XX  "
+		]
+	] [
+		code: 58
+		image: [
+			"     "
+			" XX  "
+			" XX  "
+			"     "
+			" XX  "
+			" XX  "
+			"     "
+		]
+	] [
+		code: 59
+		image: [
+			"     "
+			" XX  "
+			" XX  "
+			"     "
+			" XX  "
+			"  X  "
+			" X   "
+		]
+	] [
+		code: 60
+		image: [
+			"   X "
+			"  X  "
+			" X   "
+			"X    "
+			" X   "
+			"  X  "
+			"   X "
+		]
+	] [
+		code: 61
+		image: [
+			"     "
+			"     "
+			"XXXXX"
+			"     "
+			"XXXXX"
+			"     "
+			"     "
+		]
+	] [
+		code: 62
+		image: [
+			" X   "
+			"  X  "
+			"   X "
+			"    X"
+			"   X "
+			"  X  "
+			" X   "
+		]
+	] [
+		code: 63
+		image: [
+			" XXX "
+			"X   X"
+			"    X"
+			"   X "
+			"  X  "
+			"     "
+			"  X  "
+		]
+	] [
+		code: 64
+		image: [
+			" XXX "
+			"X   X"
+			"    X"
+			" XX X"
+			"X X X"
+			"X X X"
+			" XXX "
+		]
+	] [
+		code: 65
+		image: [
+			" XXX "
+			"X   X"
+			"X   X"
+			"X   X"
+			"XXXXX"
+			"X   X"
+			"X   X"
+		]
+	] [
+		code: 66
+		image: [
+			"XXXX "
+			"X   X"
+			"X   X"
+			"XXXX "
+			"X   X"
+			"X   X"
+			"XXXX "
+		]
+	] [
+		code: 67
+		image: [
+			" XXX "
+			"X   X"
+			"X    "
+			"X    "
+			"X    "
+			"X   X"
+			" XXX "
+		]
+	] [
+		code: 68
+		image: [
+			"XXX  "
+			"X  X "
+			"X   X"
+			"X   X"
+			"X   X"
+			"X  X "
+			"XXX  "
+		]
+	] [
+		code: 69
+		image: [
+			"XXXXX"
+			"X    "
+			"X    "
+			"XXXX "
+			"X    "
+			"X    "
+			"XXXXX"
+		]
+	] [
+		code: 70
+		image: [
+			"XXXXX"
+			"X    "
+			"X    "
+			"XXXX "
+			"X    "
+			"X    "
+			"X    "
+		]
+	] [
+		code: 71
+		image: [
+			" XXX "
+			"X   X"
+			"X    "
+			"X XXX"
+			"X   X"
+			"X   X"
+			" XXXX"
+		]
+	] [
+		code: 72
+		image: [
+			"X   X"
+			"X   X"
+			"X   X"
+			"XXXXX"
+			"X   X"
+			"X   X"
+			"X   X"
+		]
+	] [
+		code: 73
+		image: [
+			" XXX "
+			"  X  "
+			"  X  "
+			"  X  "
+			"  X  "
+			"  X  "
+			" XXX "
+		]
+	] [
+		code: 74
+		image: [
+			"  XXX"
+			"   X "
+			"   X "
+			"   X "
+			"   X "
+			"X  X "
+			" XX  "
+		]
+	] [
+		code: 75
+		image: [
+			"X   X"
+			"X  X "
+			"X X  "
+			"XX   "
+			"X X  "
+			"X  X "
+			"X   X"
+		]
+	] [
+		code: 76
+		image: [
+			"X    "
+			"X    "
+			"X    "
+			"X    "
+			"X    "
+			"X    "
+			"XXXXX"
+		]
+	] [
+		code: 77
+		image: [
+			"X   X"
+			"XX XX"
+			"X X X"
+			"X X X"
+			"X   X"
+			"X   X"
+			"X   X"
+		]
+	] [
+		code: 78
+		image: [
+			"X   X"
+			"X   X"
+			"XX  X"
+			"X X X"
+			"X  XX"
+			"X   X"
+			"X   X"
+		]
+	] [
+		code: 79
+		image: [
+			" XXX "
+			"X   X"
+			"X   X"
+			"X   X"
+			"X   X"
+			"X   X"
+			" XXX "
+		]
+	] [
+		code: 80
+		image: [
+			"XXXX "
+			"X   X"
+			"X   X"
+			"XXXX "
+			"X    "
+			"X    "
+			"X    "
+		]
+	] [
+		code: 81
+		image: [
+			" XXX "
+			"X   X"
+			"X   X"
+			"X   X"
+			"X X X"
+			"X  X "
+			" XX X"
+		]
+	] [
+		code: 82
+		image: [
+			"XXXX "
+			"X   X"
+			"X   X"
+			"XXXX "
+			"X X  "
+			"X  X "
+			"X   X"
+		]
+	] [
+		code: 83
+		image: [
+			" XXXX"
+			"X    "
+			"X    "
+			" XXX "
+			"    X"
+			"    X"
+			"XXXX "
+		]
+	] [
+		code: 84
+		image: [
+			"XXXXX"
+			"  X  "
+			"  X  "
+			"  X  "
+			"  X  "
+			"  X  "
+			"  X  "
+		]
+	] [
+		code: 85
+		image: [
+			"X   X"
+			"X   X"
+			"X   X"
+			"X   X"
+			"X   X"
+			"X   X"
+			" XXX "
+		]
+	] [
+		code: 86
+		image: [
+			"X   X"
+			"X   X"
+			"X   X"
+			"X   X"
+			"X   X"
+			" X X "
+			"  X  "
+		]
+	] [
+		code: 87
+		image: [
+			"X   X"
+			"X   X"
+			"X   X"
+			"X   X"
+			"X X X"
+			"X X X"
+			" X X "
+		]
+	] [
+		code: 88
+		image: [
+			"X   X"
+			"X   X"
+			" X X "
+			"  X  "
+			" X X "
+			"X   X"
+			"X   X"
+		]
+	] [
+		code: 89
+		image: [
+			"X   X"
+			"X   X"
+			"X   X"
+			" X X "
+			"  X  "
+			"  X  "
+			"  X  "
+		]
+	] [
+		code: 90
+		image: [
+			"XXXXX"
+			"    X"
+			"   X "
+			"  X  "
+			" X   "
+			"X    "
+			"XXXXX"
+		]
+	] [
+		code: 91
+		image: [
+			" XXX "
+			" X   "
+			" X   "
+			" X   "
+			" X   "
+			" X   "
+			" XXX "
+		]
+	] [
+		code: 92
+		image: [
+			"     "
+			"X    "
+			" X   "
+			"  X  "
+			"   X "
+			"    X"
+			"     "
+		]
+	] [
+		code: 93
+		image: [
+			" XXX "
+			"   X "
+			"   X "
+			"   X "
+			"   X "
+			"   X "
+			" XXX "
+		]
+	] [
+		code: 94
+		image: [
+			"  X  "
+			" X X "
+			"X   X"
+			"     "
+			"     "
+			"     "
+			"     "
+		]
+	] [
+		code: 95
+		image: [
+			"     "
+			"     "
+			"     "
+			"     "
+			"     "
+			"     "
+			"XXXXX"
+		]
+	] [
+		code: 96
+		image: [
+			" X   "
+			"  X  "
+			"   X "
+			"     "
+			"     "
+			"     "
+			"     "
+		]
+	] [
+		code: 97
+		image: [
+			"     "
+			"     "
+			" XXX "
+			"    X"
+			" XXXX"
+			"X   X"
+			" XXXX"
+		]
+	] [
+		code: 98
+		image: [
+			"X    "
+			"X    "
+			"X    "
+			"XXXX "
+			"X   X"
+			"X   X"
+			"XXXX "
+		]
+	] [
+		code: 99
+		image: [
+			"     "
+			"     "
+			" XXXX"
+			"X    "
+			"X    "
+			"X    "
+			" XXXX"
+		]
+	] [
+		code: 100
+		image: [
+			"    X"
+			"    X"
+			"    X"
+			" XXXX"
+			"X   X"
+			"X   X"
+			" XXXX"
+		]
+	] [
+		code: 101
+		image: [
+			"     "
+			"     "
+			" XXX "
+			"X   X"
+			"XXXXX"
+			"X    "
+			" XXXX"
+		]
+	] [
+		code: 102
+		image: [
+			"   X "
+			"  X X"
+			"  X  "
+			" XXX "
+			"  X  "
+			"  X  "
+			"  X  "
+		]
+	] [
+		code: 103
+		image: [
+			"     "
+			"     "
+			" XXXX"
+			"X   X"
+			" XXXX"
+			"    X"
+			"XXXX "
+		]
+	] [
+		code: 104
+		image: [
+			"X    "
+			"X    "
+			"X    "
+			"XXXX "
+			"X   X"
+			"X   X"
+			"X   X"
+		]
+	] [
+		code: 105
+		image: [
+			"     "
+			"  X  "
+			"     "
+			"  X  "
+			"  X  "
+			"  X  "
+			"  X  "
+		]
+	] [
+		code: 106
+		image: [
+			"   X "
+			"     "
+			"   X "
+			"   X "
+			"   X "
+			"X  X "
+			" XX  "
+		]
+	] [
+		code: 107
+		image: [
+			" X   "
+			" X   "
+			" X  X"
+			" X X "
+			" XX  "
+			" X X "
+			" X  X"
+		]
+	] [
+		code: 108
+		image: [
+			" XX  "
+			"  X  "
+			"  X  "
+			"  X  "
+			"  X  "
+			"  X  "
+			" XXX "
+		]
+	] [
+		code: 109
+		image: [
+			"     "
+			"     "
+			"XX XX"
+			"X X X"
+			"X X X"
+			"X X X"
+			"X   X"
+		]
+	] [
+		code: 110
+		image: [
+			"     "
+			"     "
+			"X XX "
+			"XX  X"
+			"X   X"
+			"X   X"
+			"X   X"
+		]
+	] [
+		code: 111
+		image: [
+			"     "
+			"     "
+			" XXX "
+			"X   X"
+			"X   X"
+			"X   X"
+			" XXX "
+		]
+	] [
+		code: 112
+		image: [
+			"     "
+			"     "
+			"XXXX "
+			"X   X"
+			"XXXX "
+			"X    "
+			"X    "
+		]
+	] [
+		code: 113
+		image: [
+			"     "
+			"     "
+			" XXXX"
+			"X   X"
+			" XXXX"
+			"    X"
+			"    X"
+		]
+	] [
+		code: 114
+		image: [
+			"     "
+			"     "
+			"X XX "
+			"XX  X"
+			"X    "
+			"X    "
+			"X    "
+		]
+	] [
+		code: 115
+		image: [
+			"     "
+			"     "
+			" XXXX"
+			"X    "
+			" XXX "
+			"    X"
+			"XXXX "
+		]
+	] [
+		code: 116
+		image: [
+			"  X  "
+			"  X  "
+			"XXXXX"
+			"  X  "
+			"  X  "
+			"  X X"
+			"   X "
+		]
+	] [
+		code: 117
+		image: [
+			"     "
+			"     "
+			"X   X"
+			"X   X"
+			"X   X"
+			"X   X"
+			" XXX "
+		]
+	] [
+		code: 118
+		image: [
+			"     "
+			"     "
+			"X   X"
+			"X   X"
+			"X   X"
+			" X X "
+			"  X  "
+		]
+	] [
+		code: 119
+		image: [
+			"     "
+			"     "
+			"X   X"
+			"X   X"
+			"X X X"
+			"X X X"
+			" X X "
+		]
+	] [
+		code: 120
+		image: [
+			"     "
+			"     "
+			"X   X"
+			" X X "
+			"  X  "
+			" X X "
+			"X   X"
+		]
+	] [
+		code: 121
+		image: [
+			"     "
+			"     "
+			"X   X"
+			" X X "
+			"  X  "
+			"  X  "
+			" X   "
+		]
+	] [
+		code: 122
+		image: [
+			"     "
+			"     "
+			"XXXXX"
+			"   X "
+			"  X  "
+			" X   "
+			"XXXXX"
+		]
+	] [
+		code: 123
+		image: [
+			"   XX"
+			"  X  "
+			"  X  "
+			" X   "
+			"  X  "
+			"  X  "
+			"   XX"
+		]
+	] [
+		code: 124
+		image: [
+			"  X  "
+			"  X  "
+			"  X  "
+			"     "
+			"  X  "
+			"  X  "
+			"  X  "
+		]
+	] [
+		code: 125
+		image: [
+			"XX   "
+			"  X  "
+			"  X  "
+			"   X "
+			"  X  "
+			"  X  "
+			"XX   "
+		]
+	] [
+		code: 126
+		image: [
+			"    X"
+			" XXX "
+			"X    "
+			"     "
+			"     "
+			"     "
+			"     "
+		]
+	] [
 		code: 127
 		name: "Delete"
 		abbr: "DEL"
@@ -883,80 +1928,6 @@ overrideData: [
 	]
 ] 
 
-fontData: [
-	; 5x7 Character Font Code for PIC CPU Assemblers
-	; Taken from http://www.noritake-itron.com/Softview/fontspic.htm
-	; The bytes are organised vertically and sequentially for each char's column.
-	; D7 is at the top with the space being at D0 for 5x7 characters
-	#00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 
-	#00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00
-	#00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00
-	#00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 
-	#00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 
-	#00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 
-	#00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 
-	#00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 
-	#00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #F2 #00 #00 #00 
-	#E0 #00 #E0 #00 #28 #FE #28 #FE #28 #24 #54 #FE #54 #48 #C4 #C8 #10 #26 #46 
-	#6C #92 #AA #44 #0A #00 #A0 #C0 #00 #00 #00 #38 #44 #82 #00 #00 #82 #44 #38 
-	#00 #28 #10 #7C #10 #28 #10 #10 #7C #10 #10 #00 #0A #0C #00 #00 #10 #10 #10 
-	#10 #10 #00 #06 #06 #00 #00 #04 #08 #10 #20 #40 #7C #8A #92 #A2 #7C #00 #42
-	#FE #02 #00 #42 #86 #8A #92 #62 #84 #82 #A2 #D2 #8C #18 #28 #48 #FE #08 #E4
-	#A2 #A2 #A2 #9C #3C #52 #92 #92 #0C #80 #8E #90 #A0 #C0 #6C #92 #92 #92 #6C
-	#60 #92 #92 #94 #78 #00 #6C #6C #00 #00 #00 #6A #6C #00 #00 #10 #28 #44 #82
-	#00 #28 #28 #28 #28 #28 #00 #82 #44 #28 #10 #40 #80 #8A #90 #60 #4C #92 #9E
-	#82 #7C #7E #88 #88 #88 #7E #FE #92 #92 #92 #6C #7C #82 #82 #82 #44 #FE #82
-	#82 #44 #38 #FE #92 #92 #92 #82 #FE #90 #90 #90 #80 #7C #82 #92 #92 #5E #FE
-	#10 #10 #10 #FE #00 #82 #FE #82 #00 #04 #02 #82 #FC #80 #FE #10 #28 #44 #82
-	#FE #02 #02 #02 #02 #FE #40 #30 #40 #FE #FE #20 #10 #08 #FE #7C #82 #82 #82
-	#7C #FE #90 #90 #90 #60 #7C #82 #8A #84 #7A #FE #90 #98 #94 #62 #62 #92 #92
-	#92 #8C #80 #80 #FE #80 #80 #FC #02 #02 #02 #FC #F8 #04 #02 #04 #F8 #FC #02
-	#0C #02 #FC #C6 #28 #10 #28 #C6 #E0 #10 #0E #10 #E0 #86 #8A #92 #A2 #C2 #00
-	#FE #82 #82 #00 #40 #20 #10 #08 #04 #00 #82 #82 #FE #00 #20 #40 #80 #40 #20
-	#02 #02 #02 #02 #02 #00 #80 #40 #20 #00 #04 #2A #2A #2A #1E #FE #12 #12 #12
-	#0C #1C #22 #22 #22 #22 #0C #12 #12 #12 #FE #1C #2A #2A #2A #1A #00 #10 #7E
-	#90 #40 #12 #2A #2A #2A #3C #FE #10 #10 #10 #0E #00 #00 #5E #00 #00 #04 #02
-	#02 #BC #00 #00 #FE #08 #14 #22 #00 #82 #FE #02 #00 #3E #20 #1C #20 #3E #3E
-	#10 #20 #20 #1E #1C #22 #22 #22 #1C #3E #28 #28 #28 #10 #10 #28 #28 #28 #3E
-	#3E #10 #20 #20 #10 #12 #2A #2A #2A #24 #20 #20 #FC #22 #24 #3C #02 #02 #02
-	#3C #38 #04 #02 #04 #38 #3C #02 #0C #02 #3C #22 #14 #08 #14 #22 #20 #12 #0C
-	#10 #20 #22 #26 #2A #32 #22 #00 #10 #6C #82 #82 #00 #00 #EE #00 #00 #82 #82
-	#6C #10 #00 #20 #40 #40 #40 #80 #A8 #68 #3E #68 #A8 #BE #2A #2A #2A #A2 #00
-	#20 #50 #A0 #00 #04 #22 #7C #A0 #40 #84 #FC #04 #00 #20 #FE #02 #02 #12 #02
-	#1C #22 #14 #08 #36 #4E #3E #60 #40 #40 #0C #12 #52 #B2 #1C #08 #1C #2A #2A
-	#2A #F8 #40 #40 #3C #02 #7C #92 #92 #7C #00 #42 #44 #38 #04 #02 #20 #3E #20
-	#3E #22 #10 #20 #3C #22 #20 #18 #24 #7E #24 #18 #1C #22 #0C #22 #1C #82 #C6
-	#AA #92 #82 #3A #46 #40 #46 #3A #54 #54 #54 #54 #54 #44 #28 #10 #28 #44 #10
-	#10 #54 #10 #10 #00 #70 #88 #88 #70 #60 #90 #8A #80 #40 #FE #FE #92 #92 #92
-	#0A #1A #2A #4A #8A #8A #4A #2A #1A #0A #28 #2C #38 #68 #28 #04 #FE #80 #80
-	#80 #4C #92 #92 #7C #00 #04 #02 #7C #80 #40 #38 #44 #38 #44 #38 #AA #54 #AA
-	#54 #AA #00 #00 #00 #00 #00 #00 #00 #BE #00 #00 #38 #44 #FE #44 #00 #12 #7E
-	#92 #92 #42 #BA #44 #44 #44 #BA #A8 #68 #3E #68 #A8 #00 #00 #EE #00 #00 #50
-	#AA #AA #AA #14 #00 #80 #00 #80 #00 #7C #BA #AA #AA #7C #12 #AA #AA #AA #7A
-	#10 #28 #54 #AA #44 #80 #80 #80 #80 #C0 #00 #00 #00 #00 #00 #7C #AA #BA #82
-	#7C #80 #80 #80 #80 #80 #00 #E0 #A0 #E0 #00 #22 #22 #FA #22 #22 #00 #48 #98
-	#A8 #48 #00 #00 #A8 #A8 #70 #00 #00 #40 #80 #00 #04 #F8 #10 #10 #E0 #60 #FE
-	#80 #FE #80 #00 #00 #10 #10 #00 #08 #00 #02 #04 #00 #00 #48 #F8 #08 #00 #00
-	#E8 #A8 #E8 #00 #44 #AA #54 #28 #10 #F0 #04 #0C #14 #2E #F0 #00 #12 #26 #1A
-	#FE #FE #FE #FE #FE #0C #12 #A2 #02 #04 #1E #A8 #68 #28 #1E #1E #28 #68 #A8
-	#1E #1E #A8 #A8 #A8 #1E #9E #A8 #A8 #A8 #9E #9E #28 #28 #28 #9E #1E #68 #A8
-	#68 #1E #7E #90 #FE #92 #92 #70 #8A #8C #88 #88 #3E #AA #6A #2A #22 #3E #2A
-	#6A #AA #22 #3E #AA #AA #AA #22 #BE #2A #2A #2A #A2 #00 #A2 #7E #22 #00 #00
-	#22 #7E #A2 #00 #00 #A2 #BE #A2 #00 #00 #A2 #3E #A2 #00 #10 #FE #92 #82 #7C
-	#BE #90 #88 #84 #BE #1C #A2 #62 #22 #1C #1C #22 #62 #A2 #1C #1C #A2 #A2 #A2
-	#1C #9C #A2 #A2 #A2 #9C #9C #22 #22 #22 #9C #44 #28 #10 #28 #44 #3A #4C #54
-	#64 #B8 #3C #82 #42 #02 #3C #3C #02 #42 #82 #3C #3C #82 #82 #82 #3C #BC #02
-	#02 #02 #BC #60 #10 #4E #90 #60 #FE #44 #44 #44 #38 #7E #A4 #A4 #58 #00 #04
-	#AA #6A #2A #1E #04 #2A #6A #AA #1E #04 #AA #AA #AA #1E #84 #AA #AA #AA #9E
-	#04 #AA #2A #AA #1E #04 #6A #AA #6A #1E #2E #2A #1C #2A #3A #30 #4A #4C #48
-	#00 #1C #AA #6A #2A #1A #1C #2A #6A #AA #1A #1C #AA #AA #AA #1A #1C #AA #2A
-	#AA #1A #00 #80 #5E #00 #00 #00 #00 #5E #80 #00 #00 #40 #5E #40 #00 #00 #40
-	#1E #40 #00 #0C #12 #52 #B2 #1C #BE #90 #A0 #A0 #9E #0C #92 #52 #12 #0C #0C
-	#12 #52 #92 #0C #0C #52 #52 #52 #0C #4C #52 #52 #52 #4C #0C #52 #12 #52 #0C
-	#10 #10 #10 #54 #10 #18 #26 #3C #64 #18 #1C #82 #42 #02 #1C #1C #02 #42 #82
-	#1C #1C #42 #42 #42 #1C #1C #42 #02 #42 #1C #20 #12 #4C #90 #20 #FE #48 #48
-	#30 #00 #20 #92 #0C #90 #20
-] 
 
 
 ;
@@ -967,71 +1938,22 @@ fontData: [
 ;
 make-arecibo-ascii-table: function [ ; params
 	fontData [block!] "PIC CPU font data"
-	overrideData [block!] "Block of override descriptors"
+	allSymbolData [block!] "Block of character descriptors"
 ] [ ; locals
 	curChar
 	areciboTable
 	fontIter fontByte fontByteBits curBitIndex rowMajorBits bitstringRep
-	overrideBlock overrideObject
+	symbolBlock symbolObject
 ] [ ; body
 	curChar: 0
 	areciboTable: copy [] 
-	fontIter: head fontData
-	loop 256 [
-		if fontIter = tail fontData [
-			throw make error! "Too few bytes in 5x7 font data"
-		]
-		; To make it easier to turn Arecibo ASCII into a picture of a letter
-		; by inserting a line break after every 5th bit, we switch from the
-		; column-major order used by the PIC CPU to row-major order.
-		; http://en.wikipedia.org/wiki/Row-major_order
-		rowMajorBits: copy []
-		loop 7 [
-			append rowMajorBits copy ""
-		]
 
-		; 5 columns per character...
-		loop 5 [
-			fontByte: first fontIter
-			fontByteBits: enbase/base (to-string to-char to-integer fontByte) 2
-			
-			; 7 meaningful row bits per character...
-			repeat curBitIndex 7 [
-				append (pick rowMajorBits curBitIndex) (pick fontByteBits curBitIndex)
-			]
-			
-			fontIter: next fontIter
-		]
-		bitstringRep: rejoin rowMajorBits
-		either (find bitstringRep "1") [
-			append areciboTable make object! [
-				name: to-string to-char curChar
-				bitstring: bitstringRep
-			]
-		] [
-			; do not insert any empty bitstrings, we need pictures for everything
-			; besides space (which is an override)
-			append areciboTable make object! [
-				name: to-string to-char curChar
-			]
-		]
-		curChar: curChar + 1
-	]
-	if fontIter <> tail fontData [
-		throw make error! "Too many bytes in 5x7 font data"
-	]
-	
-	; NOTE: We decode all the data for kicks, but only use values for 0-127
-	; So erase all the higher records we created
-	remove/part (skip areciboTable 128) (tail areciboTable)
-	
-	foreach overrideBlock overrideData [
-		overrideObject: make object! overrideBlock
-		print ["Processing override: "]
-		print overrideObject
+	foreach symbolBlock allSymbolData [
+		symbolObject: make object! symbolBlock
+		print symbolObject
 		
-		either (in overrideObject 'image) [ 
-			bitstringRep: rejoin overrideObject/image
+		either (in symbolObject 'image) [ 
+			bitstringRep: rejoin symbolObject/image
 			if not find [" " "X" " X"] (sort unique bitstringRep) [
 				throw make error! "Override image may only contain X and (space)"
 			]
@@ -1040,13 +1962,17 @@ make-arecibo-ascii-table: function [ ; params
 			if (length? bitstringRep) <> (5 * 7) [
 				throw make error! "Override image not 5x7"
 			]
-			change (skip areciboTable overrideObject/code) make object! [
-				name: overrideObject/name
+			change (skip areciboTable symbolObject/code) make object! [
+				name: either in symbolObject 'name [
+					symbolObject/name
+				] [
+					to-string to-char symbolObject/code
+				]
 				bitstring: bitstringRep
 			]
 		] [
-			change (skip areciboTable overrideObject/code) make object! [
-				name: overrideObject/name
+			change (skip areciboTable symbolObject/code) make object! [
+				name: symbolObject/name
 				; no bitstring :(
 			]
 		]
@@ -1268,11 +2194,11 @@ print-output-separator: function [] [] [
 ;
 print-arecibo-ascii-table: function [
 	fontData [block!]
-	overrideData [block!]
+	allSymbolData [block!]
 ] [
 	areciboTable curChar areciboString
 ] [
-	areciboTable: make-arecibo-ascii-table fontData overrideData 
+	areciboTable: make-arecibo-ascii-table fontData allSymbolData 
 
 	print-output-separator
 
@@ -1301,4 +2227,4 @@ print-arecibo-ascii-table: function [
 	]
 ]
 
-print-arecibo-ascii-table fontData overrideData
+print-arecibo-ascii-table fontData allSymbolData
