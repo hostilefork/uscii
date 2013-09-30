@@ -1,95 +1,110 @@
-REBOL [
-	Title: {"Arecibo Ascii Generator"}
-	Purpose: "Generates Character Set USCII-5x7-ENGLISH-C0"
-	Description: { A USCII system ("Universal Semiotic Coding for Information
-	Interchange"--pronounced "you-ski") is a method of embedding 2-D visual
-	representations of letters, numbers, and control signals into the coded
-	numbers agreed upon to represent them.
+Rebol [
+	Title: {Arecibo Ascii Generator}
 
-	For instance, instead of using 65 for A and 66 for B as ASCII does...we 
-	might consider using 15621226033 for A and 16400753439 for B.  The reason
-	this could be interesting is that when converted into binary, these are:
+	Purpose: {Generates Character Set USCII-5x7-ENGLISH-C0}
 
-		15621226033 (base 10) = 01110100011000110001111111000110001 (base 2)
-		16400753439 (base 10) = 11110100011000111110100011000111110 (base 2)
+	Description: {
+		A USCII system ("Universal Semiotic Coding for Information
+		Interchange", pronounced "you-ski") is a method of embedding 2-D
+		visual representations of letters, numbers, and control signals
+		into the coded numbers agreed upon to represent them.
 
-	When transmitted in a medium which hints at the significance of a 35-bit
-	pattern, the semiprime nature of that number hints at factoring it into
-	5 and 7 to make a rectangle of those dimensions.  If we do, then it will
-	reveal the letters they represent as a picture:
+		For instance, instead of using 65 for A and 66 for B as ASCII does,
+		we might consider using 15621226033 for A and 16400753439 for B.
+		The reason this could be interesting is that when converted into
+		binary, these are:
 
-	01110100011000110001111111000110001:
+			15621226033 (base 10) = 01110100011000110001111111000110001 (base 2)
+			16400753439 (base 10) = 11110100011000111110100011000111110 (base 2)
 
-			01110
-			10001
-			10001
-			10001 => "A"
-			11111
-			10001
-			10001
+		When transmitted in a medium which hints at the significance of a
+		35-bit pattern, the semiprime nature of that number hints at factoring
+		it into 5 and 7 to make a rectangle of those dimensions.  If we do,
+		then it will reveal the letters they represent as a picture:
 
-	11110100011000111110100011000111110:
+		01110100011000110001111111000110001:
 
-			11110
-			10001
-			10001
-			11110 => "B"
-			10001
-			10001
-			11110
+				01110
+				10001
+				10001
+				10001 => "A"
+				11111
+				10001
+				10001
 
-	This script generates a *draft* of the USCII variation "5x7-ENGLISH-C0".
-	I've informally labeled this standard "Arecibo Ascii" as an homage to SETI's
-	Arecibo Message, which employed a similar strategy:
+		11110100011000111110100011000111110:
 
-		http://en.wikipedia.org/wiki/Arecibo_message
+				11110
+				10001
+				10001
+				11110 => "B"
+				10001
+				10001
+				11110
 
-	5x7-ENGLISH-C0 has pictoral representations of *all* ASCII characters--
-	which include the uppercase and lowercase English alphabet, numbers, and
-	some symbols...as well as the "C0 control codes":
+		This script generates a *draft* of the USCII variation "5x7-ENGLISH-C0".
+		I've informally labeled this standard "Arecibo Ascii" as an homage to
+		SETI's Arecibo Message, which employed a similar strategy:
 
-		http://en.wikipedia.org/wiki/C0_and_C1_control_codes
+			http://en.wikipedia.org/wiki/Arecibo_message
 
-	It is therefore possible to losslessly convert a stream of ASCII characters
-	into USCII-5x7-ENGLISH-C0 and back.
+		5x7-ENGLISH-C0 has pictoral representations of *all* ASCII characters
+		which include the uppercase and lowercase English alphabet, numbers,
+		and some symbols...as well as the "C0 control codes":
+
+			http://en.wikipedia.org/wiki/C0_and_C1_control_codes
+
+		It is therefore possible to losslessly convert a stream of ASCII
+		characters into USCII-5x7-ENGLISH-C0 and back.
 	}
 
-	Author: "Hostile Fork"
+	Author: {Hostile Fork}
 	Home: http://hostilefork.com/uscii/
-	License: gpl ; GPL Version 3
+	License: 'gpl ; GPL Version 3
 
 	File: %uscii-5x7-english-c0.r
-	Date: 24-Jun-2009
-	Version: 0.1.1
+	Date: 29-Sep-2013
+	Version: 0.2.0
 
 	; Header conventions: http://www.rebol.org/one-click-submission-help.r
-	Type: fun
-	Level: intermediate
+	Type: 'fun
+	Level: 'intermediate
 
-	Usage: { Just run the script using a REBOL/View version 2 interpreter.  Get
-	one here:
+	Usage: {
+		Just run the script using a Rebol interpreter.  Get one here:
 
-		http://rebol.com/download.html
+			http://rebolsource.net
 
-	The script will print versions of the Arecibo Ascii table in a format for
-	the web (HTML table) as well as a version to use in Javascript code.  With
-	just a little bit of REBOL know-how, you can make other outputs as well...
+		The script will print versions of the Arecibo Ascii table in a format
+		for the web (HTML table) as well as a version to use in Javascript
+		code.  With just a little bit of Rebol know-how, you can make other
+		outputs as well...
 	}
 
 	History: [
-	0.1.0 [20-Oct-2008 {Initial version created to decode PIC CPU font
-	and make table for HostileFork.com blog.  Not released to general
-	public.} "Fork"]
+		0.1.0 [20-Oct-2008 {Initial version created to decode PIC CPU font
+		and make table for HostileFork.com blog.  Not released to general
+		public.} "Fork"]
 
-	0.1.1 [24-Jun-2009 {Reorganized to support the easy addition and
-	tweaking of characters for the C0 control codes.  Modified for REBOL.org
-	header conventions, but working draft placed on GitHub.} "Fork"]
+		0.1.1 [24-Jun-2009 {Reorganized to support the easy addition and
+		tweaking of characters for the C0 control codes.  Modified for Rebol.org
+		header conventions, but working draft placed on GitHub.} "Fork"]
+
+		0.2.0 [29-Sep-2013 {Picked back up and ported to the open source
+		Rebol 3 interpreter.  Improvements such as using BINARY! data type
+		for PIC CPU data, TAG! string type in HTML generation, and general
+		cleanup to use new locals-gathering FUNCTION construct.} "Fork"]
+
 	]
 ]
 
-overrideData: [
+; In case people aren't using community builds, temporary until mainlining of
+;   http://curecode.org/rebol3/ticket.rsp?id=1973
+function: :funct
+
+override-data: [
 	; Overridden characters in Arecibo ASCII-35 standard
-	; Names from http://en.wikipedia.org/wiki/ASCII#ASCII_control_characters
+	; Names from http://en.wikipedia.org/wiki/ASCIIASCII_control_characters
 	; Labels from http://en.wikipedia.org/wiki/C0_and_C1_control_codes
 	
 	; Though some of these are going to look pretty bad, my attempt is to
@@ -883,80 +898,80 @@ overrideData: [
 	]
 ] 
 
-fontData: [
-	; 5x7 Character Font Code for PIC CPU Assemblers
-	; Taken from http://www.noritake-itron.com/Softview/fontspic.htm
-	; The bytes are organised vertically and sequentially for each char's column.
-	; D7 is at the top with the space being at D0 for 5x7 characters
-	#00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 
-	#00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00
-	#00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00
-	#00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 
-	#00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 
-	#00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 
-	#00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 
-	#00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 
-	#00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #00 #F2 #00 #00 #00 
-	#E0 #00 #E0 #00 #28 #FE #28 #FE #28 #24 #54 #FE #54 #48 #C4 #C8 #10 #26 #46 
-	#6C #92 #AA #44 #0A #00 #A0 #C0 #00 #00 #00 #38 #44 #82 #00 #00 #82 #44 #38 
-	#00 #28 #10 #7C #10 #28 #10 #10 #7C #10 #10 #00 #0A #0C #00 #00 #10 #10 #10 
-	#10 #10 #00 #06 #06 #00 #00 #04 #08 #10 #20 #40 #7C #8A #92 #A2 #7C #00 #42
-	#FE #02 #00 #42 #86 #8A #92 #62 #84 #82 #A2 #D2 #8C #18 #28 #48 #FE #08 #E4
-	#A2 #A2 #A2 #9C #3C #52 #92 #92 #0C #80 #8E #90 #A0 #C0 #6C #92 #92 #92 #6C
-	#60 #92 #92 #94 #78 #00 #6C #6C #00 #00 #00 #6A #6C #00 #00 #10 #28 #44 #82
-	#00 #28 #28 #28 #28 #28 #00 #82 #44 #28 #10 #40 #80 #8A #90 #60 #4C #92 #9E
-	#82 #7C #7E #88 #88 #88 #7E #FE #92 #92 #92 #6C #7C #82 #82 #82 #44 #FE #82
-	#82 #44 #38 #FE #92 #92 #92 #82 #FE #90 #90 #90 #80 #7C #82 #92 #92 #5E #FE
-	#10 #10 #10 #FE #00 #82 #FE #82 #00 #04 #02 #82 #FC #80 #FE #10 #28 #44 #82
-	#FE #02 #02 #02 #02 #FE #40 #30 #40 #FE #FE #20 #10 #08 #FE #7C #82 #82 #82
-	#7C #FE #90 #90 #90 #60 #7C #82 #8A #84 #7A #FE #90 #98 #94 #62 #62 #92 #92
-	#92 #8C #80 #80 #FE #80 #80 #FC #02 #02 #02 #FC #F8 #04 #02 #04 #F8 #FC #02
-	#0C #02 #FC #C6 #28 #10 #28 #C6 #E0 #10 #0E #10 #E0 #86 #8A #92 #A2 #C2 #00
-	#FE #82 #82 #00 #40 #20 #10 #08 #04 #00 #82 #82 #FE #00 #20 #40 #80 #40 #20
-	#02 #02 #02 #02 #02 #00 #80 #40 #20 #00 #04 #2A #2A #2A #1E #FE #12 #12 #12
-	#0C #1C #22 #22 #22 #22 #0C #12 #12 #12 #FE #1C #2A #2A #2A #1A #00 #10 #7E
-	#90 #40 #12 #2A #2A #2A #3C #FE #10 #10 #10 #0E #00 #00 #5E #00 #00 #04 #02
-	#02 #BC #00 #00 #FE #08 #14 #22 #00 #82 #FE #02 #00 #3E #20 #1C #20 #3E #3E
-	#10 #20 #20 #1E #1C #22 #22 #22 #1C #3E #28 #28 #28 #10 #10 #28 #28 #28 #3E
-	#3E #10 #20 #20 #10 #12 #2A #2A #2A #24 #20 #20 #FC #22 #24 #3C #02 #02 #02
-	#3C #38 #04 #02 #04 #38 #3C #02 #0C #02 #3C #22 #14 #08 #14 #22 #20 #12 #0C
-	#10 #20 #22 #26 #2A #32 #22 #00 #10 #6C #82 #82 #00 #00 #EE #00 #00 #82 #82
-	#6C #10 #00 #20 #40 #40 #40 #80 #A8 #68 #3E #68 #A8 #BE #2A #2A #2A #A2 #00
-	#20 #50 #A0 #00 #04 #22 #7C #A0 #40 #84 #FC #04 #00 #20 #FE #02 #02 #12 #02
-	#1C #22 #14 #08 #36 #4E #3E #60 #40 #40 #0C #12 #52 #B2 #1C #08 #1C #2A #2A
-	#2A #F8 #40 #40 #3C #02 #7C #92 #92 #7C #00 #42 #44 #38 #04 #02 #20 #3E #20
-	#3E #22 #10 #20 #3C #22 #20 #18 #24 #7E #24 #18 #1C #22 #0C #22 #1C #82 #C6
-	#AA #92 #82 #3A #46 #40 #46 #3A #54 #54 #54 #54 #54 #44 #28 #10 #28 #44 #10
-	#10 #54 #10 #10 #00 #70 #88 #88 #70 #60 #90 #8A #80 #40 #FE #FE #92 #92 #92
-	#0A #1A #2A #4A #8A #8A #4A #2A #1A #0A #28 #2C #38 #68 #28 #04 #FE #80 #80
-	#80 #4C #92 #92 #7C #00 #04 #02 #7C #80 #40 #38 #44 #38 #44 #38 #AA #54 #AA
-	#54 #AA #00 #00 #00 #00 #00 #00 #00 #BE #00 #00 #38 #44 #FE #44 #00 #12 #7E
-	#92 #92 #42 #BA #44 #44 #44 #BA #A8 #68 #3E #68 #A8 #00 #00 #EE #00 #00 #50
-	#AA #AA #AA #14 #00 #80 #00 #80 #00 #7C #BA #AA #AA #7C #12 #AA #AA #AA #7A
-	#10 #28 #54 #AA #44 #80 #80 #80 #80 #C0 #00 #00 #00 #00 #00 #7C #AA #BA #82
-	#7C #80 #80 #80 #80 #80 #00 #E0 #A0 #E0 #00 #22 #22 #FA #22 #22 #00 #48 #98
-	#A8 #48 #00 #00 #A8 #A8 #70 #00 #00 #40 #80 #00 #04 #F8 #10 #10 #E0 #60 #FE
-	#80 #FE #80 #00 #00 #10 #10 #00 #08 #00 #02 #04 #00 #00 #48 #F8 #08 #00 #00
-	#E8 #A8 #E8 #00 #44 #AA #54 #28 #10 #F0 #04 #0C #14 #2E #F0 #00 #12 #26 #1A
-	#FE #FE #FE #FE #FE #0C #12 #A2 #02 #04 #1E #A8 #68 #28 #1E #1E #28 #68 #A8
-	#1E #1E #A8 #A8 #A8 #1E #9E #A8 #A8 #A8 #9E #9E #28 #28 #28 #9E #1E #68 #A8
-	#68 #1E #7E #90 #FE #92 #92 #70 #8A #8C #88 #88 #3E #AA #6A #2A #22 #3E #2A
-	#6A #AA #22 #3E #AA #AA #AA #22 #BE #2A #2A #2A #A2 #00 #A2 #7E #22 #00 #00
-	#22 #7E #A2 #00 #00 #A2 #BE #A2 #00 #00 #A2 #3E #A2 #00 #10 #FE #92 #82 #7C
-	#BE #90 #88 #84 #BE #1C #A2 #62 #22 #1C #1C #22 #62 #A2 #1C #1C #A2 #A2 #A2
-	#1C #9C #A2 #A2 #A2 #9C #9C #22 #22 #22 #9C #44 #28 #10 #28 #44 #3A #4C #54
-	#64 #B8 #3C #82 #42 #02 #3C #3C #02 #42 #82 #3C #3C #82 #82 #82 #3C #BC #02
-	#02 #02 #BC #60 #10 #4E #90 #60 #FE #44 #44 #44 #38 #7E #A4 #A4 #58 #00 #04
-	#AA #6A #2A #1E #04 #2A #6A #AA #1E #04 #AA #AA #AA #1E #84 #AA #AA #AA #9E
-	#04 #AA #2A #AA #1E #04 #6A #AA #6A #1E #2E #2A #1C #2A #3A #30 #4A #4C #48
-	#00 #1C #AA #6A #2A #1A #1C #2A #6A #AA #1A #1C #AA #AA #AA #1A #1C #AA #2A
-	#AA #1A #00 #80 #5E #00 #00 #00 #00 #5E #80 #00 #00 #40 #5E #40 #00 #00 #40
-	#1E #40 #00 #0C #12 #52 #B2 #1C #BE #90 #A0 #A0 #9E #0C #92 #52 #12 #0C #0C
-	#12 #52 #92 #0C #0C #52 #52 #52 #0C #4C #52 #52 #52 #4C #0C #52 #12 #52 #0C
-	#10 #10 #10 #54 #10 #18 #26 #3C #64 #18 #1C #82 #42 #02 #1C #1C #02 #42 #82
-	#1C #1C #42 #42 #42 #1C #1C #42 #02 #42 #1C #20 #12 #4C #90 #20 #FE #48 #48
-	#30 #00 #20 #92 #0C #90 #20
-] 
+; 5x7 Character Font Code for PIC CPU Assemblers
+; Taken from http://www.noritake-itron.com/Softview/fontspic.htm
+; The bytes are organised vertically and sequentially for each char's column.
+; D7 is at the top with the space being at D0 for 5x7 characters
+font-data: #{
+	00000000000000000000000000000000000000 
+	00000000000000000000000000000000000000
+	00000000000000000000000000000000000000
+	00000000000000000000000000000000000000 
+	00000000000000000000000000000000000000 
+	00000000000000000000000000000000000000 
+	00000000000000000000000000000000000000 
+	00000000000000000000000000000000000000 
+	000000000000000000000000000000F2000000 
+	E000E00028FE28FE282454FE5448C4C8102646 
+	6C92AA440A00A0C00000003844820000824438 
+	0028107C102810107C1010000A0C0000101010 
+	1010000606000004081020407C8A92A27C0042
+	FE020042868A92628482A2D28C182848FE08E4
+	A2A2A29C3C5292920C808E90A0C06C9292926C
+	6092929478006C6C0000006A6C000010284482
+	002828282828008244281040808A90604C929E
+	827C7E8888887EFE9292926C7C82828244FE82
+	824438FE92929282FE909090807C8292925EFE
+	101010FE0082FE8200040282FC80FE10284482
+	FE02020202FE403040FEFE201008FE7C828282
+	7CFE909090607C828A847AFE90989462629292
+	928C8080FE8080FC020202FCF8040204F8FC02
+	0C02FCC6281028C6E0100E10E0868A92A2C200
+	FE8282004020100804008282FE002040804020
+	02020202020080402000042A2A2A1EFE121212
+	0C1C222222220C121212FE1C2A2A2A1A00107E
+	9040122A2A2A3CFE1010100E00005E00000402
+	02BC0000FE0814220082FE02003E201C203E3E
+	1020201E1C2222221C3E28282810102828283E
+	3E10202010122A2A2A242020FC22243C020202
+	3C38040204383C020C023C221408142220120C
+	102022262A322200106C82820000EE00008282
+	6C10002040404080A8683E68A8BE2A2A2AA200
+	2050A00004227CA04084FC040020FE02021202
+	1C221408364E3E6040400C1252B21C081C2A2A
+	2AF840403C027C92927C004244380402203E20
+	3E2210203C222018247E24181C220C221C82C6
+	AA92823A4640463A5454545454442810284410
+	10541010007088887060908A8040FEFE929292
+	0A1A2A4A8A8A4A2A1A0A282C38682804FE8080
+	804C92927C0004027C80403844384438AA54AA
+	54AA00000000000000BE00003844FE4400127E
+	929242BA444444BAA8683E68A80000EE000050
+	AAAAAA1400800080007CBAAAAA7C12AAAAAA7A
+	102854AA4480808080C000000000007CAABA82
+	7C808080808000E0A0E0002222FA2222004898
+	A8480000A8A870000040800004F81010E060FE
+	80FE80000010100008000204000048F8080000
+	E8A8E80044AA542810F0040C142EF00012261A
+	FEFEFEFEFE0C12A202041EA868281E1E2868A8
+	1E1EA8A8A81E9EA8A8A89E9E2828289E1E68A8
+	681E7E90FE9292708A8C88883EAA6A2A223E2A
+	6AAA223EAAAAAA22BE2A2A2AA200A27E220000
+	227EA20000A2BEA20000A23EA20010FE92827C
+	BE908884BE1CA262221C1C2262A21C1CA2A2A2
+	1C9CA2A2A29C9C2222229C44281028443A4C54
+	64B83C8242023C3C0242823C3C8282823CBC02
+	0202BC60104E9060FE444444387EA4A4580004
+	AA6A2A1E042A6AAA1E04AAAAAA1E84AAAAAA9E
+	04AA2AAA1E046AAA6A1E2E2A1C2A3A304A4C48
+	001CAA6A2A1A1C2A6AAA1A1CAAAAAA1A1CAA2A
+	AA1A00805E000000005E800000405E40000040
+	1E40000C1252B21CBE90A0A09E0C9252120C0C
+	1252920C0C5252520C4C5252524C0C5212520C
+	101010541018263C64181C8242021C1C024282
+	1C1C4242421C1C4202421C20124C9020FE4848
+	300020920C9020
+} 
 
 
 ;
@@ -965,93 +980,86 @@ fontData: [
 ; For more on bitstreams, see:
 ; http://www.rebolforces.com/articles/compression/4/
 ;
-make-arecibo-ascii-table: function [ ; params
-	fontData [block!] "PIC CPU font data"
-	overrideData [block!] "Block of override descriptors"
-] [ ; locals
-	curChar
-	areciboTable
-	fontIter fontByte fontByteBits curBitIndex rowMajorBits bitstringRep
-	overrideBlock overrideObject
-] [ ; body
-	curChar: 0
-	areciboTable: copy [] 
-	fontIter: head fontData
+make-arecibo-ascii-table: function [
+	font-data [binary!] {PIC CPU font data}
+	override-data [block!] {Block of override descriptors}
+] [
+	current-char: 0
+	arecibo-table: copy [] 
+	font-iter: head font-data
+
+	; NOTE: We decode all the data for kicks, but only use values for 0-127
 	loop 256 [
-		if fontIter = tail fontData [
+		if font-iter = tail font-data [
 			throw make error! "Too few bytes in 5x7 font data"
 		]
+
 		; To make it easier to turn Arecibo ASCII into a picture of a letter
 		; by inserting a line break after every 5th bit, we switch from the
 		; column-major order used by the PIC CPU to row-major order.
-		; http://en.wikipedia.org/wiki/Row-major_order
-		rowMajorBits: copy []
+		;
+		;    http://en.wikipedia.org/wiki/Row-major_order
+		;
+		row-major-bits: copy []
 		loop 7 [
-			append rowMajorBits copy ""
+			append row-major-bits copy {}
 		]
 
 		; 5 columns per character...
 		loop 5 [
-			fontByte: first fontIter
-			fontByteBits: enbase/base (to-string to-char to-integer fontByte) 2
-			
+			font-byte: first font-iter
+			font-byte-bits: enbase/base (append copy #{} font-byte) 2
 			; 7 meaningful row bits per character...
-			repeat curBitIndex 7 [
-				append (pick rowMajorBits curBitIndex) (pick fontByteBits curBitIndex)
+			repeat bit-index 7 [
+				append (pick row-major-bits bit-index) (pick font-byte-bits bit-index)
 			]
 			
-			fontIter: next fontIter
+			font-iter: next font-iter
 		]
-		bitstringRep: rejoin rowMajorBits
-		either (find bitstringRep "1") [
-			append areciboTable make object! [
-				name: to-string to-char curChar
-				bitstring: bitstringRep
-			]
-		] [
-			; do not insert any empty bitstrings, we need pictures for everything
-			; besides space (which is an override)
-			append areciboTable make object! [
-				name: to-string to-char curChar
-			]
+
+		bitstring: rejoin row-major-bits
+
+		; do not insert any empty bitstrings, we need pictures for everything
+		; besides space (which is an override)
+
+		append arecibo-table object compose [
+			name: to string! to char! current-char			
+			bitstring: (if find bitstring "1" [bitstring])
 		]
-		curChar: curChar + 1
+		++ current-char
 	]
-	if fontIter <> tail fontData [
+	if font-iter <> tail font-data [
 		throw make error! "Too many bytes in 5x7 font data"
 	]
 	
-	; NOTE: We decode all the data for kicks, but only use values for 0-127
 	; So erase all the higher records we created
-	remove/part (skip areciboTable 128) (tail areciboTable)
+	remove/part (skip arecibo-table 128) (tail arecibo-table)
 	
-	foreach overrideBlock overrideData [
-		overrideObject: make object! overrideBlock
-		print ["Processing override: "]
-		print overrideObject
+	foreach override-block override-data [
+		override-obj: object override-block
+		print [{Processing override:} override-obj/name]
 		
-		either (in overrideObject 'image) [ 
-			bitstringRep: rejoin overrideObject/image
-			if not find [" " "X" " X"] (sort unique bitstringRep) [
-				throw make error! "Override image may only contain X and (space)"
-			]
-			replace/all bitstringRep #" " #"0"
-			replace/all bitstringRep #"X" #"1"
-			if (length? bitstringRep) <> (5 * 7) [
-				throw make error! "Override image not 5x7"
-			]
-			change (skip areciboTable overrideObject/code) make object! [
-				name: overrideObject/name
-				bitstring: bitstringRep
-			]
-		] [
-			change (skip areciboTable overrideObject/code) make object! [
-				name: overrideObject/name
-				; no bitstring :(
-			]
+		unless in override-obj 'image [
+			throw make error! {No "image:" field in override}
+		]
+
+		bitstring: rejoin override-obj/image
+		replace/all bitstring space "0"
+		replace/all bitstring "X" "1"
+
+		unless {01} == union {01} (sort unique bitstring) [
+			throw make error! "Override image may only contain X and (space)"
+		]
+		if (length? bitstring) <> (5 * 7) [
+			throw make error! "Override image not 5x7"
+		]
+
+		change (skip arecibo-table override-obj/code) object compose [
+			name: override-obj/name
+			bitstring: (bitstring)
 		]
 	]
-	return areciboTable
+	return arecibo-table
 ]
 
 ;
@@ -1060,41 +1068,39 @@ make-arecibo-ascii-table: function [ ; params
 ; just a draft of this fledgling and bizarre specification!
 ;
 make-header: function [
-	startComment
-	endComment
+	start-comment
+	end-comment
 ] [
-	; no locals yet...
-] [
-	return reform [
-		startComment	
+	reform [
+		start-comment	
 		reform [
 			"Generated with"
 			system/script/header/file
 			"version"
 			system/script/header/version
 		]
-		endComment
-		"^/"
+		end-comment
+		newline
 	
-		startComment
+		start-comment
 		reform [
 			"See:" system/script/header/home
 		]
-		endComment
-		"^/"
+		end-comment
+		newline
 	
-		startComment
+		start-comment
 		reform [
 			"WARNING: THIS IS A WORKING DRAFT AS OF" 
 			system/script/header/date 
 		]
-		endComment
-		"^/"
+		end-comment
+		newline
 		
-		startComment
+		start-comment
 		"C0 control codes are especially likely to change!"
-		endComment
-		"^/"
+		end-comment
+		newline
 	]
 ]
 
@@ -1102,76 +1108,62 @@ make-header: function [
 ; Generate HTML variation of the Arecibo ASCII table
 ;
 print-for-html: function [
-	areciboTable
+	arecibo-table
 ] [
-	areciboObject curChar
-] [
-	print "<!-- HTML format of Arecibo ASCII Table -->"
+	print <!-- HTML format of Arecibo ASCII Table -->
 	print make-header "<!--" "-->"
-	print "<table>"	
-	print rejoin [
-		"<thead>"
-		"<tr>"
-		"<td><b>ASCII</b></td>"
-		"<td><b>Character</b></td>"
-		"<td><b>Arecibo ASCII (35-bit binary)</b></td>"
-		"</tr>"
-		"</thead>"
+	print <table>	
+	print reform [
+		<thead>
+		<tr>
+		<td> <b> {ASCII} </b> </td>
+		<td> <b> {Character} </b> </td>
+		<td> <b> {Arecibo ASCII (35-bit binary)} </b> </td>
+		</tr>
+		</thead>
 	]
 
-	print "<tbody>"
-	curChar: 0
-	foreach areciboObject areciboTable [	
-		print rejoin [
-			"<tr>"
-			"<td>" to-integer curChar "</td>"
-			"<td>" areciboObject/name "</td>"
-			"<td>"
-			either (in areciboObject 'bitstring) [
-				areciboObject/bitstring
-			] [
-				"(not yet defined)"
-			]
-			"</td>"
-			"</tr>"
+	print <tbody>
+	current-char: 0
+	foreach arecibo-object arecibo-table [
+		print reform [
+			<tr>
+			<td> to integer! current-char </td>
+			<td> arecibo-object/name </td>
+			<td> arecibo-object/bitstring </td>
+			</tr>
 		]
-		curChar: curChar + 1
+		++ current-char
 	]
-	print "</tbody>"
-	print "</table>"
+	print </tbody>
+	print </table>
 ]
 
 ;
 ; Generate Javascript version of the Arecibo ASCII Table
 ;
 print-for-javascript: function [
-	areciboTable
-] [
-	areciboObject curChar lastChar?
+	arecibo-table
 ] [
 	print "/* Javascript format of Arecibo ASCII Table */"
 	print make-header "/*" "*/"
 	print "var AreciboAscii = {"
-	print rejoin [{^-name: "} "USCII-5x7-ENGLISH-C0" {",}]
-	print rejoin [{^-version: "} system/script/header/version {",}]
-	print rejoin [{^-date: "} system/script/header/date  {",}]
-	print rejoin [{^-bitstrings: [}]
-	curChar: 0
-	foreach areciboObject areciboTable [
-		lastChar?: curChar = ((length? areciboTable) - 1)
+	print rejoin [tab {name:} space {"} {USCII-5x7-ENGLISH-C0} {"} {,}]
+	print rejoin [tab {version:} space {"} system/script/header/version {"} {,}]
+	print rejoin [tab {date:} space {"} system/script/header/date {"} {,}]
+	print rejoin [tab {bitstrings:} space "["]
+	current-char: 0
+	foreach arecibo-object arecibo-table [
+		lastChar?: current-char = ((length? arecibo-table) - 1)
 		print rejoin [
-			"^-^-" ; tab character in REBOL
-			either (in areciboObject 'bitstring) [
-				rejoin [{"} areciboObject/bitstring {"}]
-			] [
-				"null"
-			]
-			(either lastChar? [{ }] [{,}])
-			" // (" to-integer curChar "): " areciboObject/name
+			tab tab
+			{"} arecibo-object/bitstring {"}
+			either lastChar? [space] [{,}]
+			space "//" space "(" to integer! current-char ")" {:} space arecibo-object/name
 		]
-		curChar: curChar + 1
+		++ current-char
 	]
-	print "^-]"
+	print rejoin [tab "]"]
 	print "};"
 ]
 
@@ -1179,87 +1171,90 @@ print-for-javascript: function [
 ; Generates images of the characters and the CSS sprite of all of them
 ; http://css-tricks.com/css-sprites/
 ;
-; See REBOL's image documentation here:
+; See Rebol's image documentation here:
 ; 	http://www.rebol.com/docs/image.html
 ;
 generate-all-image-files: function [
-	areciboTable
+	arecibo-table
 	directory
-	scaleFactors [block!] "block of scaled versions to create"
+	scale-factors [block!] {block of integers for scale factors to be generated}
 ] [
-	areciboObject curChar scaleFactor
-	img imgIndex imgAll imgAllIndex
-	directoryForScale filename filenameMeter filenameAll
-] [
-	foreach scale scaleFactors [
+	foreach scale scale-factors [
 		print ["Generating images for scale factor:" scale]
-		directoryForScale: to-file reduce [directory rejoin ["x" (to-string scale)]]
+		scale-dir: to file! rejoin [directory "x" to string! scale "/"]
 		
-		if not exists? directoryForScale [
-			make-dir/deep directoryForScale
+		if not exists? scale-dir [
+			make-dir/deep scale-dir
 		]
 
-		imgAll: make image! to-pair reduce [5 * scale ((length? areciboTable) * 7) * scale]
-		imgAll/alpha: 0 ; make entire image opaque
-		imgAllIndex: 1
+		all-images: make image! to pair! reduce [5 * scale ((length? arecibo-table) * 7) * scale]
+		all-images/alpha: 255 ; make entire image opaque
+		all-images-index: 1
 
-		curChar: 0
-		foreach areciboObject areciboTable [
-			if (in areciboObject 'bitstring) [
-				img: make image! to-pair reduce [(5 * scale) (7 * scale)]
-				img/rgb: red ; make it easier to see mistakes in draw code as red
-				img/alpha: 0 ; make entire image opaque
-				imgIndex: 1
+		current-char: 0
+		foreach arecibo-object arecibo-table [
+			if in arecibo-object 'bitstring [
+				image: make image! to pair! reduce [(5 * scale) (7 * scale)]
+				image/rgb: red ; make it easier to see mistakes in draw code as red
+				image/alpha: 255 ; make entire image opaque
+				image-index: 1
 
-				bitRow: 0 
-				bitCol:	0		
-				foreach bit areciboObject/bitstring [
-					color: either (bit == #"1") [black] [white]
-					change/dup skip img (to-pair reduce [
-						(bitCol * scale) (bitRow * scale)
-					]) color to-pair reduce [
+				bit-row: 0 
+				bit-column:	0		
+				foreach bit arecibo-object/bitstring [
+					color: either bit == #"1" [black] [white]
+					change/dup skip image (to pair! reduce [
+						(bit-column * scale) (bit-row * scale)
+					]) color to pair! reduce [
 						(scale) (scale)
 					]
-					change/dup skip imgAll (to-pair reduce [
-						(bitCol * scale) ((bitRow + (curChar * 7)) * scale)
-					]) color to-pair reduce [
-						(scale) (scale)
+					change/dup skip all-images to pair! reduce [
+						bit-column * scale
+						(bit-row + (current-char * 7)) * scale
+					] color to pair! reduce [
+						scale scale
 					]
 										
-					imgIndex: imgIndex + 1
-					imgAllIndex: imgAllIndex + 1
-					bitCol: bitCol + 1
-					if (bitCol == (5)) [
-						bitRow: bitRow + 1
-						bitCol: 0
+					++ image-index
+					++ all-images-index
+					++ bit-column
+					if bit-column == 5 [
+						++ bit-row
+						bit-column: 0
 					]
 				]
-				filename: to-file reduce [directoryForScale rejoin [curChar ".png"]] 
-				print ["Writing" areciboObject/bitstring "to: " clean-path filename]
-				save/png filename img 
+				filename: to file! rejoin [scale-dir current-char {.png}]
+				print [{Writing} arecibo-object/bitstring {to:} clean-path filename]
+				save filename image 
 			]
-			curChar: curChar + 1
+			++ current-char
 		]
 		
-		filenameAll: to-file reduce [directoryForScale "all.png"]
-		print ["Writing all images to single CSS sprite: " clean-path filename]
-		save/png filenameAll imgAll
+		all-images-filename: to file! reduce [scale-dir "all.png"]
+		print [{Writing all images to single CSS sprite:} clean-path filename]
+		save all-images-filename all-images
 		
 		; The condition of "all bits set" is reserved for setting up the "meter",
 		; e.g. helping to hint at the significance of the 35 bit pattern.  This
 		; cannot be used inside of the signal.
-		imgMeter: make image! [5x7]
-		img/alpha: 0 ; set all image opaque
-		img/rgb: black ; set all image black
-		filenameMeter: to-file reduce [directoryForScale "meter.png"]
-		print ["Writing meter to: " clean-path filenameMeter]
-		save/png filenameMeter imgMeter
+		meter-image: make image! [5x7]
+		image/alpha: 0 ; set all image opaque
+		image/rgb: black ; set all image black
+		meter-image-file: to file! reduce [scale-dir "meter.png"]
+		print [{Writing meter to:} clean-path meter-image-file]
+		save meter-image-file meter-image
 	]
 ]
 
 
-print-output-separator: function [] [] [
-	print "^/^/----------^/^/" ; "^/" is REBOL's notation for line breaks
+print-output-separator: function [] [
+	print rejoin [
+		newline
+		newline
+		{----------}
+		newline
+		newline
+	]
 ]
 
 
@@ -1267,38 +1262,35 @@ print-output-separator: function [] [] [
 ; Main routine called by the script which invokes all the others
 ;
 print-arecibo-ascii-table: function [
-	fontData [block!]
-	overrideData [block!]
+	font-data [binary!]
+	override-data [block!]
 ] [
-	areciboTable curChar areciboString
-] [
-	areciboTable: make-arecibo-ascii-table fontData overrideData 
+	arecibo-table: make-arecibo-ascii-table font-data override-data 
 
 	print-output-separator
 
-	generate-all-image-files areciboTable %./images/5x7/ [1 4]
+	generate-all-image-files arecibo-table %./images/5x7/ [1 4]
 
 	print-output-separator
 		
-	print-for-html areciboTable
+	print-for-html arecibo-table
 
 	print-output-separator
 	
-	print-for-javascript areciboTable
+	print-for-javascript arecibo-table
 	
 	print-output-separator
 		
-	curChar: 0
-	foreach areciboObject areciboTable [
-		if not (in areciboObject 'bitstring) [
+	current-char: 0
+	foreach arecibo-object arecibo-table [
+		if not (in arecibo-object 'bitstring) [
 			print rejoin [
 				"WARNING - No bitstring defined for "
-				"(" curChar "): "
-				areciboObject/name
+				"(" current-char "):" space arecibo-object/name
 			]
 		]
-		curChar: curChar + 1
+		current-char: current-char + 1
 	]
 ]
 
-print-arecibo-ascii-table fontData overrideData
+print-arecibo-ascii-table font-data override-data
