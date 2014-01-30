@@ -101,6 +101,7 @@ Rebol [
 ; In case people aren't using community builds, temporary until mainlining of
 ;   http://curecode.org/rebol3/ticket.rsp?id=1973
 function: :funct
+space: #" "
 
 override-data: [
 	; Overridden characters in Arecibo ASCII-35 standard
@@ -1022,7 +1023,7 @@ make-arecibo-ascii-table: function [
 		; do not insert any empty bitstrings, we need pictures for everything
 		; besides space (which is an override)
 
-		append arecibo-table object compose [
+		append arecibo-table make object! compose [
 			name: to string! to char! current-char			
 			bitstring: (if find bitstring "1" [bitstring])
 		]
@@ -1036,7 +1037,7 @@ make-arecibo-ascii-table: function [
 	remove/part (skip arecibo-table 128) (tail arecibo-table)
 	
 	foreach override-block override-data [
-		override-obj: object override-block
+		override-obj: make object! override-block
 		print [{Processing override:} override-obj/name]
 		
 		unless in override-obj 'image [
@@ -1054,7 +1055,7 @@ make-arecibo-ascii-table: function [
 			throw make error! "Override image not 5x7"
 		]
 
-		change (skip arecibo-table override-obj/code) object compose [
+		change (skip arecibo-table override-obj/code) make object! compose [
 			name: override-obj/name
 			bitstring: (bitstring)
 		]
@@ -1107,13 +1108,16 @@ make-header: function [
 ;
 ; Generate HTML variation of the Arecibo ASCII table
 ;
-print-for-html: function [
+generate-html-table: function [
+	filename [file!]
 	arecibo-table
 ] [
-	print <!-- HTML format of Arecibo ASCII Table -->
-	print make-header "<!--" "-->"
-	print <table>	
-	print reform [
+	lines: copy []
+
+	append lines <!-- HTML format of Arecibo ASCII Table -->
+	append lines make-header "<!--" "-->"
+	append lines <table>	
+	append lines reform [
 		<thead>
 		<tr>
 		<td> <b> {ASCII} </b> </td>
@@ -1123,10 +1127,10 @@ print-for-html: function [
 		</thead>
 	]
 
-	print <tbody>
+	append lines <tbody>
 	current-char: 0
 	foreach arecibo-object arecibo-table [
-		print reform [
+		append lines reform [
 			<tr>
 			<td> to integer! current-char </td>
 			<td> arecibo-object/name </td>
@@ -1135,27 +1139,36 @@ print-for-html: function [
 		]
 		++ current-char
 	]
-	print </tbody>
-	print </table>
+	append lines </tbody>
+	append lines </table>
+
+	write/lines filename lines
 ]
 
 ;
 ; Generate Javascript version of the Arecibo ASCII Table
 ;
-print-for-javascript: function [
+generate-javascript-table: function [
+	filename [file!]
 	arecibo-table
 ] [
-	print "/* Javascript format of Arecibo ASCII Table */"
-	print make-header "/*" "*/"
-	print "var AreciboAscii = {"
-	print rejoin [tab {name:} space {"} {USCII-5x7-ENGLISH-C0} {"} {,}]
-	print rejoin [tab {version:} space {"} system/script/header/version {"} {,}]
-	print rejoin [tab {date:} space {"} system/script/header/date {"} {,}]
-	print rejoin [tab {bitstrings:} space "["]
+	lines: copy []
+
+	append lines "/* Javascript format of Arecibo ASCII Table */"
+	append lines make-header "/*" "*/"
+	append lines "var AreciboAscii = {"
+	foreach blk [
+		[tab {name:} space {"} {USCII-5x7-ENGLISH-C0} {"} {,}]
+		[tab {version:} space {"} system/script/header/version {"} {,}]
+		[tab {date:} space {"} system/script/header/date {"} {,}]
+		[tab {bitstrings:} space "["]
+	] [
+		append lines rejoin blk
+	]
 	current-char: 0
 	foreach arecibo-object arecibo-table [
 		lastChar?: current-char = ((length? arecibo-table) - 1)
-		print rejoin [
+		append lines rejoin [
 			tab tab
 			{"} arecibo-object/bitstring {"}
 			either lastChar? [space] [{,}]
@@ -1163,8 +1176,11 @@ print-for-javascript: function [
 		]
 		++ current-char
 	]
-	print rejoin [tab "]"]
-	print "};"
+	append lines rejoin [tab "]"]
+	append lines "};"
+	append lines ""
+
+	write/lines filename lines
 ]
 
 ;
@@ -1195,14 +1211,14 @@ generate-all-image-files: function [
 		foreach arecibo-object arecibo-table [
 			if in arecibo-object 'bitstring [
 				image: make image! to pair! reduce [(5 * scale) (7 * scale)]
-				image/rgb: red ; make it easier to see mistakes in draw code as red
+				image/rgb: 255.255.0 ; make it easier to see mistakes in draw code as red
 				image/alpha: 255 ; make entire image opaque
 				image-index: 1
 
 				bit-row: 0 
 				bit-column:	0		
 				foreach bit arecibo-object/bitstring [
-					color: either bit == #"1" [black] [white]
+					color: either bit == #"1" [0.0.0] [255.255.255]
 					change/dup skip image (to pair! reduce [
 						(bit-column * scale) (bit-row * scale)
 					]) color to pair! reduce [
@@ -1239,7 +1255,7 @@ generate-all-image-files: function [
 		; cannot be used inside of the signal.
 		meter-image: make image! [5x7]
 		image/alpha: 0 ; set all image opaque
-		image/rgb: black ; set all image black
+		image/rgb: 0.0.0 ; set all image black
 		meter-image-file: to file! reduce [scale-dir "meter.png"]
 		print [{Writing meter to:} clean-path meter-image-file]
 		save meter-image-file meter-image
@@ -1269,15 +1285,17 @@ print-arecibo-ascii-table: function [
 
 	print-output-separator
 
-	generate-all-image-files arecibo-table %./images/5x7/ [1 4]
+;	generate-all-image-files arecibo-table rejoin [system/options/path %images/5x7/] [1 4]
 
-	print-output-separator
+	print "Outputting HTML table"
 		
-	print-for-html arecibo-table
+	generate-html-table rejoin [system/options/path %uscii-5x7-english-c0.html] arecibo-table
 
 	print-output-separator
 	
-	print-for-javascript arecibo-table
+	print "Outputting JavaScript table"
+
+	generate-javascript-table rejoin [system/options/path %uscii-5x7-english-c0.js] arecibo-table
 	
 	print-output-separator
 		
