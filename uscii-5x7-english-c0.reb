@@ -1285,17 +1285,17 @@ print-arecibo-ascii-table: function [
 
 	print-output-separator
 
-;	generate-all-image-files arecibo-table rejoin [system/options/path %images/5x7/] [1 4]
+	generate-all-image-files arecibo-table rejoin [system/options/path %/build/images/5x7/] [1 4]
 
 	print "Outputting HTML table"
 		
-	generate-html-table rejoin [system/options/path %uscii-5x7-english-c0.html] arecibo-table
+	generate-html-table rejoin [system/options/path %build/uscii-5x7-english-c0.html] arecibo-table
 
 	print-output-separator
 	
 	print "Outputting JavaScript table"
 
-	generate-javascript-table rejoin [system/options/path %uscii-5x7-english-c0.js] arecibo-table
+	generate-javascript-table rejoin [system/options/path %build/uscii-5x7-english-c0.js] arecibo-table
 	
 	print-output-separator
 		
