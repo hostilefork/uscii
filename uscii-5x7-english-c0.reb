@@ -60,11 +60,11 @@ Rebol [
 
 	Author: {Hostile Fork}
 	Home: http://hostilefork.com/uscii/
-	License: 'gpl ; GPL Version 3
+	License: 'mit
 
 	File: %uscii-5x7-english-c0.r
-	Date: 29-Sep-2013
-	Version: 0.2.0
+	Date: 2-Feb-2014
+	Version: 0.3.0
 
 	; Header conventions: http://www.rebol.org/one-click-submission-help.r
 	Type: 'fun
@@ -75,10 +75,13 @@ Rebol [
 
 			http://rebolsource.net
 
-		The script will print versions of the Arecibo Ascii table in a format
-		for the web (HTML table) as well as a version to use in Javascript
-		code.  With just a little bit of Rebol know-how, you can make other
-		outputs as well...
+		The script will output its results in the %/build directory.
+		This includes:
+
+			* a CSS sprite of all the characters as one file
+			* individual PNG files of all the symbols, at x1 and x4 size
+			* an HTML version of the table
+			* a Javascript version of the table for using in programs
 	}
 
 	History: [
@@ -94,6 +97,14 @@ Rebol [
 		Rebol 3 interpreter.  Improvements such as using BINARY! data type
 		for PIC CPU data, TAG! string type in HTML generation, and general
 		cleanup to use new locals-gathering FUNCTION construct.} "Fork"]
+
+		0.3.0 [2-Feb-2014 {Builds products instead of just printing them
+		to the screen, added demo website to the official repository,
+		changed standard to use 5 bits of gap instead of 1 to separate
+		characters when encoded in a medium and added seven 40-bit units
+		of 0 to the front of the signal, as well as five 40-bit units of
+		1 to the end of the signal to provide more bulletproof context.
+		MIT license.}]
 
 	]
 ]
@@ -1156,12 +1167,15 @@ generate-javascript-table: function [
 
 	append lines "/* Javascript format of Arecibo ASCII Table */"
 	append lines make-header "/*" "*/"
-	append lines "var AreciboAscii = {"
+	append lines "var AreciboAscii = {};"
+
 	foreach blk [
-		[tab {name:} space {"} {USCII-5x7-ENGLISH-C0} {"} {,}]
-		[tab {version:} space {"} system/script/header/version {"} {,}]
-		[tab {date:} space {"} system/script/header/date {"} {,}]
-		[tab {bitstrings:} space "["]
+		[{AreciboAscii["name"] = } {"} {USCII-5x7-ENGLISH-C0} {"} {;}]
+		[{AreciboAscii["version"] = } {"} system/script/header/version {"} {;}]
+		[{AreciboAscii["date"] = } space {"} system/script/header/date {"} {;}]
+		[{AreciboAscii["width"] = } space 5 {;}]
+		[{AreciboAscii["height"] = } space 7 {;}]
+		[{AreciboAscii["bitstrings"] = } space "["]
 	] [
 		append lines rejoin blk
 	]
@@ -1169,16 +1183,14 @@ generate-javascript-table: function [
 	foreach arecibo-object arecibo-table [
 		lastChar?: current-char = ((length? arecibo-table) - 1)
 		append lines rejoin [
-			tab tab
+			tab
 			{"} arecibo-object/bitstring {"}
 			either lastChar? [space] [{,}]
 			space "//" space "(" to integer! current-char ")" {:} space arecibo-object/name
 		]
 		++ current-char
 	]
-	append lines rejoin [tab "]"]
-	append lines "};"
-	append lines ""
+	append lines rejoin ["];"]
 
 	write/lines filename lines
 ]

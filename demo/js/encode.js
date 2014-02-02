@@ -84,8 +84,11 @@ document.observe("dom:loaded", function() {
 		inputProcessed = true;
 	};
 	
-	AreciboEncode.updateCore = function(asciiString, format) {
-		if (asciiString === "") {
+	AreciboEncode.updateCore = function(str, format) {
+		if (str === "") {
+			// REVIEW: is there such a thing as an empty Arecibo Ascii String?
+			// If there is no data in between the meter, the 5 leading and 7 trailing
+			// meter will just look like 12 blocks.
 			return {
 				ok: false,
 				type: "info",
@@ -105,135 +108,54 @@ document.observe("dom:loaded", function() {
 				'<a href="http://uscii.hostilefork.com/" target="_blank">learn more</a></i></p>' 
 			};
 		}
-		
-		var nonasciiChars = [];
-		for (var testIndex = 0; testIndex < asciiString.length; testIndex++) {
-			var curCharTest = asciiString.charCodeAt(testIndex);
-			if (curCharTest >= AreciboAscii.bitstrings.length) {
-				nonasciiChars.push(curCharTest);
-			}
-		}
-		
-		if (nonasciiChars.length > 0) {
+			
+		var binary = AreciboAscii.encodeAsBinary(str);
+		if (binary.length % 8 !== 0) {
 			throw {
 				ok: false,
 				type: "error",
-				msg: "Your input contains non-ASCII characters"
+				msg: "Length " + binary.length + " not evenly divisible by 8 bits! " +
+					"Should not happen with 40-bit elements..."
 			};
 		}
-	
-		var origWidth = 5;
-		var origHeight = 7;
-		var scaleFactor = 4;
-		var useCssSprite = true;
-		var scaleInBrowser = false;
-		
-		var startMeter = origWidth /* $('startmeter_spin').getValue() */ ;
-		var endMeter = origHeight /* $('endmeter_spin').getValue() */;
-		var meterBitstring = "";
-		for (var meterIndex = 0; meterIndex < origWidth*origHeight; meterIndex++) {
-			meterBitstring += "1";
-		}
-		
-		var binaryString = "";		
-		var bitmapsString = "";
-		
-		// Note: IE7 does not know lightgray is #D3D3D3
-		function imageHtmlString(charNum) {
-			var elementString = undefined;
-			if (useCssSprite) {
-				// http://css-tricks.com/css-sprites/
-				if (scaleInBrowser) {
-					throw {
-						ok: false,
-						type: "error",
-						msg: "Can't use browser scaling for CSS sprites, see http://stackoverflow.com/questions/376253/stretch-and-scale-css-background"
-					};
-				} else {
-					// would have used a span or div with width/height attributes but css likes to ignore the height in those cases
-					elementString = '<img style="width: ' + origWidth * scaleFactor + 'px; height: ' + origHeight * scaleFactor + 'px; border:1px solid #D3D3D3; background-image:url(\'/media/build/images/5x7/x' + scaleFactor + '/all.png\'); background-position:0px -' + origHeight * charNum * scaleFactor + 'px;" width="' + origWidth*scaleFactor + '" height="' + origHeight*scaleFactor + '" src="/media/demo/images/1x1.png" />';
-				}
-			} else {
-				if (scaleInBrowser) {
-					elementString = '<img style="border:1px solid #D3D3D3;" width="' + origWidth*scaleFactor + '" height="' + origHeight*scaleFactor + '" src="/media/build/images/5x7/x1/' + charNum + '.png" />';
-				} else {
-					elementString = '<img style="border:1px solid #D3D3D3;" width="' + origWidth*scaleFactor + '" height="' + origHeight*scaleFactor + '" src="/media/build/images/5x7/x' + scaleFactor + '/' + charNum + '.png" />';
-				}
-			}
-			return elementString;
-		}
-		
-		function meterHtmlString() {
-			var elementString = undefined;
-			if (scaleInBrowser) {
-				elementString = '<img style="border:1px solid #D3D3D3;" width="' + origWidth*scaleFactor + '" height="' + origHeight*scaleFactor + '" src="/media/build/images/5x7/x1/meter.png" />';
-			} else {
-				elementString = '<img style="border:1px solid #D3D3D3;" width="' + origWidth*scaleFactor + '" height="' + origHeight*scaleFactor + '" src="/media/build/images/5x7/x' + scaleFactor + '/meter.png" />';
-			}
-			return elementString;
-		}
-		
-		for (var preMeterIndex = 0; preMeterIndex < startMeter; preMeterIndex++) {
-			binaryString += meterBitstring + "0";
-			bitmapsString += meterHtmlString();
-		}
-	
-		for (var convertIndex = 0; convertIndex < asciiString.length; convertIndex++) {
-			var curCharConvert = asciiString.charCodeAt(convertIndex);
-			binaryString += AreciboAscii.bitstrings[curCharConvert] + '0';	
-			bitmapsString += imageHtmlString(curCharConvert);
-		}
-	
-		for (var postMeterIndex = 0; postMeterIndex < endMeter; postMeterIndex++) {
-			binaryString += meterBitstring + "0";
-			bitmapsString += meterHtmlString();
-		}
-	
-		var convertedString = undefined;
+
+		var index = undefined;
+		var converted = undefined;
 		switch (format) {
 			case "Hexadecimal":
-				if (binaryString.length % 4 !== 0) {
-					throw {
-						ok: false,
-						type: "error",
-						msg: "Not evenly divisible by 4!  Should not happen as long as we're using 36-bit elements..."
-					};
-				} else {
-					convertedString = "";
-					for (var hexIndex = 0; hexIndex < binaryString.length; hexIndex += 4) {
-						var hexDigitBitstring = binaryString.substr(hexIndex, 4);
-						var hexDigit = undefined;
-						switch (hexDigitBitstring) {
-							case "0000": hexDigit = '0'; break;
-							case "0001": hexDigit = '1'; break;
-							case "0010": hexDigit = '2'; break;
-							case "0011": hexDigit = '3'; break;
-							case "0100": hexDigit = '4'; break;
-							case "0101": hexDigit = '5'; break;
-							case "0110": hexDigit = '6'; break;
-							case "0111": hexDigit = '7'; break;
-							case "1000": hexDigit = '8'; break;
-							case "1001": hexDigit = '9'; break;
-							case "1010": hexDigit = 'A'; break;
-							case "1011": hexDigit = 'B'; break;
-							case "1100": hexDigit = 'C'; break;
-							case "1101": hexDigit = 'D'; break;
-							case "1110": hexDigit = 'E'; break;
-							case "1111": hexDigit = 'F'; break;
-							default:
-								throw {
-									ok: false,
-									type: "error",
-									msg: "Internal error &mdash; bad binary sequence, report to webmaster!"
-								};
-						}
-						convertedString += hexDigit;
+				converted = "";
+				for (index = 0; index < binary.length; index += 4) {
+					var hexDigit = undefined;
+					switch (binary.substr(index, 4)) {
+						case "0000": hexDigit = '0'; break;
+						case "0001": hexDigit = '1'; break;
+						case "0010": hexDigit = '2'; break;
+						case "0011": hexDigit = '3'; break;
+						case "0100": hexDigit = '4'; break;
+						case "0101": hexDigit = '5'; break;
+						case "0110": hexDigit = '6'; break;
+						case "0111": hexDigit = '7'; break;
+						case "1000": hexDigit = '8'; break;
+						case "1001": hexDigit = '9'; break;
+						case "1010": hexDigit = 'A'; break;
+						case "1011": hexDigit = 'B'; break;
+						case "1100": hexDigit = 'C'; break;
+						case "1101": hexDigit = 'D'; break;
+						case "1110": hexDigit = 'E'; break;
+						case "1111": hexDigit = 'F'; break;
+						default:
+							throw {
+								ok: false,
+								type: "error",
+								msg: "Internal error &mdash; bad binary sequence, report to webmaster!"
+							};
 					}
+					converted += hexDigit;
 				}
 				break;
 				
 			case "Binary":
-				convertedString = binaryString;
+				converted = binary;
 				break;
 				
 			default:
@@ -249,28 +171,30 @@ document.observe("dom:loaded", function() {
 		   those opportunities every 5 characters.  On the downside of this,
 		   it means that people copying the text to the clipboard will end
 		   up getting the weird characters too.  For that reason, I decided
-		   to break every 36 symbols with a newline instead. */
-		var breakableString = "";
-		var breakSpacing = 36;
-		for (var breakableIndex = 0; breakableIndex < convertedString.length; breakableIndex += breakSpacing) {
+		   to break every 40 symbols with a newline instead. */
+		var breakable = "";
+		var breakSpacing =
+			AreciboAscii.width * AreciboAscii.height + /* char size */
+			AreciboAscii.width /* gap */;
+		for (var index = 0; index < converted.length; index += breakSpacing) {
 			// substr() method takes an index and a length
-			breakableString += convertedString.substr(breakableIndex, breakSpacing);
-			/* breakableString += "&#8203;"; */ // nasty clipboard properties
-			breakableString += "<br />";
+			breakable += converted.substr(index, breakSpacing);
+			/* breakable += "&#8203;"; */ // nasty clipboard properties
+			breakable += "<br />";
 			
 		}
 		// substring() method takes two indices
-		if (breakableIndex < convertedString.length - 1) {
-			breakableString += convertedString.substring(breakableIndex, convertedString.length - 1);
+		if (index < converted.length - 1) {
+			breakable += converted.substring(index, converted.length - 1);
 		}
 		
-		$('conversion_content').update('<tt>' + breakableString + '</tt>');
-		$('bitmaps_content').update(bitmapsString);
+		$('conversion_content').update('<tt>' + breakable + '</tt>');
+		$('bitmaps_content').update(AreciboAscii.htmlForBitmaps(str));
 
 		return {
 			ok: true,
 			type: "success",
-			msg: 'USCII-5x7-ENGLISH-C0 data is ' + convertedString.length + ' ' + format + ' digits long'
+			msg: 'USCII-5x7-ENGLISH-C0 data is ' + converted.length + ' ' + format + ' digits long'
 		};
 	};
 	
