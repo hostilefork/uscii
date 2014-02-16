@@ -109,10 +109,6 @@ Rebol [
 	]
 ]
 
-; In case people aren't using community builds, temporary until mainlining of
-;   http://curecode.org/rebol3/ticket.rsp?id=1973
-function: :funct
-space: #" "
 
 override-data: [
 	; Overridden characters in Arecibo ASCII-35 standard
