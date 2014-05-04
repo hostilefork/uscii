@@ -18,11 +18,7 @@ AreciboAscii.ensureCodepointsValid = function(str) {
 	// http://stackoverflow.com/a/9436948/211160
 	//
 	if (!(typeof str === 'string' || str instanceof String)) {
-		throw {
-			ok: false,
-			type: "error",
-			msg: "ensureCodepointsValid received non-string" 
-		};
+		throw Error("ensureCodepointsValid received non-string");
 	}
 
 	//
@@ -60,13 +56,9 @@ AreciboAscii.ensureCodepointsValid = function(str) {
 		var message = "String contains non-ASCII codepoints:";
 		for (index = 0; index < nonascii.length; nonascii++) {
 			message += " ";
-			message += nonascii[nonascii].toString();
+			message += String.fromCharCode(nonascii[index]);
 		}
-		throw {
-			ok: false,
-			type: "error",
-			msg: message
-		};
+		throw Error(message);
 	}
 };
 
@@ -145,12 +137,10 @@ AreciboAscii.decodeBinary = function(binary) {
 	var blocksize = this.width * this.height + this.width;
 
 	if (binary.length % blocksize !== 0) {
-		throw {
-			ok: false,
-			type: "error",
-			msg: 'Your input is ' + binary.length + 
-				' bits long, but must be an even multiple of ' + blocksize + ' bits.'
-		};
+		throw Error('Your input is ' + binary.length + 
+			' bits long, but must be an even multiple of ' +
+			blocksize + ' bits.'
+		);
 	}
 
 	//
@@ -169,17 +159,15 @@ AreciboAscii.decodeBinary = function(binary) {
 		+ this.height /* trailing meter */
 		+ this.width /* trailing silence */
 	)) {
-		throw {
-			ok: false,
-			type: "error",
-			msg: 'Your input is ' + blocks.length + ' ' +
-				blocksize + '-bit blocks long but must have at least ' +
-				this.height + ' silence (all 0) blocks at the beginning,' +
-				this.width + ' leading meter blocks, ' +
-				1 + ' one block of actual data, ' +
-				this.height + ' trailing meter blocks and' +
-				this.width + '  silence (all 1) blocks at the end'
-		};
+		throw Error(
+			'Your input is ' + blocks.length + ' ' +
+			blocksize + '-bit blocks long but must have at least ' +
+			this.height + ' silence (all 0) blocks at the beginning,' +
+			this.width + ' leading meter blocks, ' +
+			1 + ' one block of actual data, ' +
+			this.height + ' trailing meter blocks and' +
+			this.width + '  silence (all 1) blocks at the end'
+		);
 	}
 
 	var index = undefined;
@@ -188,21 +176,17 @@ AreciboAscii.decodeBinary = function(binary) {
 	// Take care of the silence on front and back...
 	for (index = 0; index < this.height; index++) {
 		if (blocks[0] != this.zeroSilence) {
-			throw {
-				ok: false,
-				type: "error",
-				msg: "Fewer than " + this.height + " silence blocks at beginning of signal."
-			};
+			throw Error("Fewer than " + this.height + 
+				" silence blocks at beginning of signal."
+			);
 		}
 		blocks.shift();
 	}
 	for (index = 0; index < this.width; index++) {
 		if (blocks[blocks.length - 1] != this.oneSilence) {
-			throw {
-				ok: false,
-				type: "error",
-				msg: "Fewer than " + this.width + " silence blocks at end of signal."
-			};
+			throw Error(
+				"Fewer than " + this.width + " silence blocks at end of signal."
+			);
 		}
 		blocks.pop();
 	}
@@ -210,21 +194,17 @@ AreciboAscii.decodeBinary = function(binary) {
 	// Take care of the meter on front and back...
 	for (index = 0; index < this.width; index++) {
 		if (blocks[0] != this.meter + this.gap) {
-			throw {
-				ok: false,
-				type: "error",
-				msg: "Fewer than " + this.width + " leading meter blocks in signal."
-			};
+			throw Error(
+				"Fewer than " + this.width + " leading meter blocks in signal."
+			);
 		}
 		blocks.shift();
 	}
 	for (index = 0; index < this.height; index++) {
 		if (blocks[blocks.length - 1] != this.meter + this.gap) {
-			throw {
-				ok: false,
-				type: "error",
-				msg: "Fewer than " + this.height + " trailing meter blocks in signal."
-			};
+			throw Error(
+				"Fewer than " + this.height + " trailing meter blocks in signal."
+			);
 		}
 		blocks.pop();
 	}
@@ -242,18 +222,16 @@ AreciboAscii.decodeBinary = function(binary) {
 	for (var index = 0; index < blocks.length; index ++) {
 		var cell = cellRegex.exec(blocks[index]);
 		if (!cell) {
-			throw {
-				ok: false,
-				type: "error",
-				msg: 'Arecibo ASCII payload must have units separated by ' + this.width + ' zeros.'
-			};
+			throw Error(
+				'Arecibo ASCII payload must have units separated by ' +
+				this.width + ' zeros.'
+			);
 		}
 		if (!(cell[1] in reverseTable)) {
-			throw {
-				ok: false,
-				type: 'error',
-				msg: "Bit pattern found that isn't in the USCII-5x7-ENGLISH-C0 table: " + cell[1]
-			};
+			throw Error(
+				"Bit pattern found not in the USCII-5x7-ENGLISH-C0 table: " +
+				cell[1]
+			);
 		}
 		decoded += String.fromCharCode(reverseTable[cell[1]]);
 	}
@@ -295,14 +273,9 @@ AreciboAscii.htmlForBitmaps = function(str, scaling, useCssSprite, scaleInBrowse
 		if (useCssSprite) {
 			// http://css-tricks.com/css-sprites/
 			if (scaleInBrowser) {
-				throw {
-					ok: false,
-					type: "error",
-					// http://stackoverflow.com/questions/376253/
-					msg: "Can't use browser scaling for CSS sprites."
-				};
+				throw Error("Can't use browser scaling for CSS sprites.");
 			} else {
-				imgSrc = '/media/build/images/5x7/x' + scaling + '/all.png';
+				imgSrc = '../build/images/5x7/x' + scaling + '/all.png';
 
 				// Would have used a span or div with width/height attributes
 				// But css likes to ignore the height in those cases
@@ -320,14 +293,14 @@ AreciboAscii.htmlForBitmaps = function(str, scaling, useCssSprite, scaleInBrowse
 					) +
 					tagAttr('width', this.width * scaling) +
 					tagAttr('height', this.height * scaling) +
-					tagAttr('src', '/media/demo/images/1x1.png') +
+					tagAttr('src', 'images/1x1.png') +
 				'/>';
 			}
 		} else {
 			if (scaleInBrowser) {
-				imgSrc = '/media/build/images/5x7/x1/' + codepoint + '.png';
+				imgSrc = '../build/images/5x7/x1/' + codepoint + '.png';
 			} else {
-				imgSrc = '/media/build/images/5x7/x' + scaleFactor + '/' + codepoint + '.png';
+				imgSrc = '../build/images/5x7/x' + scaleFactor + '/' + codepoint + '.png';
 			}
 
 			html = '<img ' +
@@ -345,16 +318,16 @@ AreciboAscii.htmlForBitmaps = function(str, scaling, useCssSprite, scaleInBrowse
 		var imgSrc = undefined;
 
 		if (scaleInBrowser) {
-			imgSrc = "/media/build/images/5x7/x1/meter.png";
+			imgSrc = "../build/images/5x7/x1/meter.png";
 		} else {
-			imgSrc = "/media/build/images/5x7/x' + scaleFactor + '/meter.png";
+			imgSrc = "../build/images/5x7/x' + scaleFactor + '/meter.png";
 		}
 
 		html = '<img ' +
 			tagAttr('style', cssAttr("border", "1px solid #D3D3D3")) +
 			tagAttr('width', this.width * scaling) +
 			tagAttr('height', this.height * scaling) +
-			tagAttr('src', "/media/build/images/5x7/x1/meter.png") +
+			tagAttr('src', "../build/images/5x7/x1/meter.png") +
 		'/>';
 
 		return html;

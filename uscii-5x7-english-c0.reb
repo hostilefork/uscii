@@ -62,7 +62,7 @@ Rebol [
 	Home: http://hostilefork.com/uscii/
 	License: 'mit
 
-	File: %uscii-5x7-english-c0.r
+	File: %uscii-5x7-english-c0.reb
 	Date: 2-Feb-2014
 	Version: 0.3.0
 
