@@ -7,7 +7,7 @@
 <html lang="en"><head>
 	<meta charset="utf-8"> 
 
-	<title>USCII Encoder Demo</title> 
+	<title>USCII Encoder</title> 
 		
 <!--
     encode.html - Encode ASCII strings to USCII-5x7-ENGLISH-C0
@@ -45,27 +45,16 @@
 	
 		<!-- HEADER DIV -->
 		<div id="header">
-			<img src="images/uscii_logo_400x160.png" alt="USCII logo 400x160" />
-		</div>
-		
-		<!-- NAVIGATION DIV -->
-		<div id="nav">
-			<!-- skiplink anchor: navigation -->
-			<a id="navigation"></a>
-			<div class="hlist">
-				<!-- main navigation: horizontal list -->
-				<ul>
-				  <li class="active"><strong>encode</strong></li>
-				  <li><a href="decode.html">decode</a></li>
-				  <li><a href="http://uscii.hostilefork.com/">specification</a></li>
-				  <li><a href="https://github.com/hostilefork/uscii/blob/master/CREDITS.md">credits</a></li>
-				</ul>
-			</div>
+			<img src="images/uscii-logo-400x225.png" alt="USCII logo" />
 		</div>
 		
 		<!-- MAIN DIV -->
 		<div id="main">
 		
+			<h3>Encoding Demo</h3>
+
+			<p>Type (or paste) some ASCII text in the box to try it out.  An explanation will appear, but you can also read information <a href="http://uscii.hostilefork.com/" target="_blank">on the USCII homepage</a> to learn more.</p>
+
 			<textarea id="mystring" name="mystring" rows="8" cols= "50" style="width: 100%; height: 80px;"></textarea>
 
 			<div id="loader_container" style="display: none;">
@@ -77,8 +66,6 @@
 					<p>While ASCII uses small arbitrary values (e.g. 65 for "A", 66 for "B"), USCII encodings use <i>much</i> larger values (e.g. 15621226033 for "A", 16400753439 for "B"). These unusual numbers were chosen because they mathematically contain <i>bitmaps of the symbols they represent</i>!  Using a technique modeled after SETI's Arecibo Message, semiprimes are employed to suggest the two-dimensional decoding of these bit patterns.</p>
 
 					<p>USCII signals are able to carry meaning to a receiver independent of any table.  However, transmitters agree to use standard bitmaps (resulting in standard encoded values).  This way they can also be used like conventional character codes&mdash;for instance, to pick which character to draw from a vector font!</p>
-
-					<p><i>Type some text in the box above to try it out, or <a href="http://uscii.hostilefork.com/" target="_blank">learn more</a></i></p>
 				</div>
 
 				<!-- hide result and error by default -->
@@ -89,7 +76,7 @@
 				<div id="message" style="display: none;">
 
 					<div class="success">
-						<p>USCII-5x7-ENGLISH-C0 data is <span id="conversion_length"></span> bytes long</p>
+						<p>Success: USCII-5x7-ENGLISH-C0 data is <span id="conversion_length"></span> bytes long</p>
 
 						<div id="conversion_content"></div>
 					</div>
@@ -112,14 +99,14 @@
 
 					<p>If the recipients of the message are mathematically-minded, they'll be cued into noticing the importance of 5 and 7, and that notice the 35-bit runs.  Since 35 is a semiprime number, it's only divisible by 5 and 7, hence it might lead them to decode it as a 5x7 bitmap.  See if your friends with geek-cred can figure it out, or send them <a href="decode.html">the decoder</a> if you are feeling generous. :)</p>						
 				</div>
-
 			</div>
-		</div>
-		
-		<!-- FOOTER DIV  -->
-		<div id="footer">
-		<p>Based on <span id="spec-name">?</span></p>
-		<p>Specification draft version <span id="spec-version">?</span> as of <span id="spec-date">?</span></p>
-		</div>
+
+			<hr>
+
+			<div id="footer">
+				<p>Based on <span id="spec-name">?</span>, specification draft version <span id="spec-version">?</span> as of <span id="spec-date">?</span>.  Try the <a href="decode.html">decoder</a>, read the <a href="http://uscii.hostilefork.com/">specification</a>, or view the <a href="https://github.com/hostilefork/uscii/blob/master/CREDITS.md">credits</a>.</p>
+			</div>
+
+		</div>		
 	</div>
 </body></html>

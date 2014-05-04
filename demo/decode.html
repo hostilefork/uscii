@@ -40,33 +40,17 @@
 
 </head><body>
 	<div id="body">
-		<!-- HEADER DIV -->
 		<div id="header">
-			<img src="images/uscii_logo_400x160.png" alt="USCII logo 400x160" />
+			<img src="images/uscii-logo-400x225.png" alt="USCII logo" />
 		</div>
 		
-		<!-- NAVIGATION DIV -->
-		<div id="nav">
-			<!-- skiplink anchor: navigation -->
-			<a id="navigation"></a>
-			<div class="hlist">
-				<!-- main navigation: horizontal list -->
-				<ul>
-				  <li><a href="encode.html">encode</a></li>
-				  <li class="active"><strong>decode</strong></li>
-				  <li><a href="http://uscii.hostilefork.com/">specification</a></li>
-				  <li><a href="https://github.com/hostilefork/uscii/blob/master/CREDITS.md">credits</a></li>
-				</ul>
-			</div>
-		</div>
-		
-		<!-- MAIN DIV -->
 		<div id="main">
-						
-			<!-- CONVERTER FORM -->
-			<!-- rows and cols should be overridden by styles, if applied -->
-			<!-- Why not 100%, you ask?  Because IE7 chokes on it and hides the left section.  Garbage browser. -->
-			<textarea id="mystring" name="mystring" rows="8" cols= "50" style="width: 99%; height: 80px;"></textarea>
+			
+			<h3>Decoding Demo</h3>
+
+			<p>This is a decoder for information encoded with USCII-5x7-ENGLISH-C0.  Type (or paste) some hexadecimal notation for the bytes in the box.  An explanation will appear, but you can also read information <a href="http://uscii.hostilefork.com/">on the USCII homepage</a> to learn more.</p>
+
+			<textarea id="mystring" rows="8" cols= "50" style="width: 99%; height: 80px;"></textarea>
 
 			<div id="loader_container" style="display: none;">
 				<img src="images/ajax-loader.gif" alt="Loading...">
@@ -74,8 +58,6 @@
 
 			<div id="message_container">
 				<div id="message_default" class="info">
-					<p>This is a decoder for information encoded with USCII-5x7-ENGLISH-C0.  If you have data in this format (in hexadecimal), then paste it in the box above.</p>
-
 					<p>If you don't have anything in this format, then you can <a href="encode.html">try the encoder</a> to generate something.  It also does a pretty good job of narrating the encoding process to explain what this is all about!</p>
 				</div>
 
@@ -86,7 +68,7 @@
 
 				<div id="message" style="display: none;">
 					<div class="success">
-						<p>ASCII conversion is <span id="conversion_length"></span> characters long.</p>
+						<p>Success: ASCII conversion is <span id="conversion_length"></span> characters long.</p>
 
 						<div id="conversion_content"></div>
 					</div>
@@ -109,13 +91,11 @@
 
 					<p>But being able to read it isn't the only requirement for a safe ASCII conversion.  The specific numbers must be looked up in a standard table, to produce the string.  In this case, all the numbers matched our table...so your message could be decoded.  It could thus also be drawn in a stroked vector font (for instance).</p>
 				</div>
+
+				<div id="footer">
+					<p>Based on <span id="spec-name">?</span>, specification draft version <span id="spec-version">?</span> as of <span id="spec-date">?</span>.  Try the <a href="encode.html">encoder</a>, read the <a href="http://uscii.hostilefork.com/">specification</a>, or view the <a href="https://github.com/hostilefork/uscii/blob/master/CREDITS.md">credits</a>.</p>
+				</div>
 			</div>
-		</div>
-		
-		<!-- FOOTER DIV  -->
-		<div id="footer">
-			<p>Based on <span id="spec-name">?</span></p>
-			<p>Draft specification version <span id="spec-version">?</span> as of <span id="spec-date">?</span></p>
 		</div>
 	</div>
 </body></html>

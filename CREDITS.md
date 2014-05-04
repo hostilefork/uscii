@@ -7,5 +7,3 @@ Note that the specification is generated using the Apache-licensed [Rebol](http:
 * [jQuery](http://jquery.com/) *(MIT license)*
 
 * Ajax Loading GIF Animation - from [ajaxload.info](http://www.ajaxload.info/)
-
-* Buttons in Message Boxes - from [Knob Toolbar Icons](http://itweek.deviantart.com/art/Knob-Buttons-Toolbar-icons-73463960) by [Cocoa Grove](http://www.cocoagrove.com/)
