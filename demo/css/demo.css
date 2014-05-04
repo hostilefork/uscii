@@ -11,6 +11,13 @@ body {
     vertical-align: middle;
 }
 
+body {
+    margin: 0px;
+    padding: 0px;
+
+    background-color: #2B3856; /* "Dark slate blue" */
+}
+
 #body {
     /*
      * I dunno what "the answer" is but if you fill the whole width
