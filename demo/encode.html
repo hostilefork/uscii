@@ -13,18 +13,10 @@
     encode.html - Encode ASCII strings to USCII-5x7-ENGLISH-C0
     Copyright (C) 2009-2014 HostileFork.com
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation, either version 3 of the
-    License, or (at your option) any later version.
+	MIT license:
+		http://www.opensource.org/licenses/mit-license.php
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+	For more information, see http://uscii.hostilefork.com
 -->
 
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" type="text/javascript" charset="utf-8"></script>
@@ -97,7 +89,7 @@
 
 					<p>There is an added benefit to padding out the 35-bit semiprime series with 5-bits to reach 40, and then using 40-bit sections again for the container of "silence".   Each character unit fits exactly in 40 bits (5 bytes) for easier processing on computers which process data in multiples of 8 bits.  So we could cleanly encode this in bytes, and hence hexadecimal.</p>
 
-					<p>If the recipients of the message are mathematically-minded, they'll be cued into noticing the importance of 5 and 7, and that notice the 35-bit runs.  Since 35 is a semiprime number, it's only divisible by 5 and 7, hence it might lead them to decode it as a 5x7 bitmap.  See if your friends with geek-cred can figure it out, or send them <a href="decode.html">the decoder</a> if you are feeling generous. :)</p>						
+					<p>If the recipients of the message are mathematically-minded, they'll be cued into noticing the importance of 5 and 7, and thus notice the 35-bit runs.  Since 35 is a semiprime number, it's only divisible by 5 and 7, hence it might lead them to decode it as a 5x7 bitmap.  See if your friends with geek-cred can figure it out, or send them <a href="decode.html">the decoder</a> if you are feeling generous. :)</p>						
 				</div>
 			</div>
 

@@ -1,7 +1,3 @@
 ![USCII logo](https://raw2.github.com/hostilefork/uscii/master/uscii-logo.png)
 
-Please see:
-
-	http://hostilefork.com/uscii/
-
-For information about this project.
+Please see [http://uscii.hostilefork.com](http://uscii.hostilefork.com) for information about this project.
