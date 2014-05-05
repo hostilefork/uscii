@@ -114,7 +114,12 @@ $(function() {
 		var decoded = AreciboAscii.decodeBinary(binary);
 		
 		$('#conversion_length').text('' + decoded.length);
-		$('#conversion_content').html(decoded);
+
+		// To get carraige returns to show up we need to replace the
+		// Line feeds with breaks.  Handling all the other weird things
+		// like bells and tabs and such is left as an exercise for
+		// the reader.  :-/
+		$('#conversion_content').html(decoded.replace(/\n/g, '<br />'));
 		$('#bitmaps_content').html(AreciboAscii.htmlForBitmaps(decoded));
 
 		$('#message').show();
