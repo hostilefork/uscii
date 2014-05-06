@@ -15,7 +15,9 @@ $(function() {
 	var inputProcessed = false;
 	var lastInput = "";
 
-	$("#mystring").bind("keyup change", function() {
+	// http://stackoverflow.com/a/14148825/211160
+	// (We don't care about cursor position)
+	$("#mystring").bind("input propertychange paste cut", function() {
 		if ($('#mystring').val() == lastInput) {
 			return;
 		}
