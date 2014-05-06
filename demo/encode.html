@@ -68,7 +68,7 @@
 				<div id="message" style="display: none;">
 
 					<div class="success">
-						<p>Success: USCII-5x7-ENGLISH-C0 data is <span id="conversion_length"></span> bytes long</p>
+						<p>Success: USCII-5x7-ENGLISH-C0 data <i>(including the string container, header, and footer)</i> is <span id="conversion_length"></span> bytes long</p>
 
 						<div id="conversion_content"></div>
 					</div>
@@ -81,13 +81,17 @@
 
 					<p>Note that there are five solid characters at the head of the signal, and seven solid characters at the end.  This is called the "meter" because it helps set up the rhythm of the 35-bit sections (as well as reinforcing the importance of the prime factors).</p>
 
-					<p>The next step is to wrap up the data in a kind of "container".  We interleave the characters with five binary zero bits, which separates the meter blocks and calls more attention to the significance of the number 5.</p>
+					<p>The next step is to wrap up the data in a kind of "container".  When conventional ASCII strings are stored in computer memory, there needs to be a way to know where the string ends.  Sometimes only the end is indicated, such as with a [Null Terminator](https://en.wikipedia.org/wiki/Null-terminated_string)...adding one byte.  Numerous other strategies exist.</p>
 
-					<p>Next we set up some surrounding empty space, called the "silence".  This is just a steady stream of 0 bits before the leading meter, and continuous 1 bits after the trailing meter.  Without the silence included in the message itself, then two consecutive USCII strings in memory (for instance) would have meter bumping up against each other and obscure the meaning of the meter length.  For meaningfulness in that case, we choose 7 "character-sized" 40-bit units of zero silence in the beginning, and 5 40-bit units of one silence in the end.</p>
+					<p>However: in USCII the goal is semiotics&mdash;not frugality.  To make a string in memory as conspicuous and robust a pattern as possible; we indicate the end <i>and</i> the beginning with patterns.  The patterns used to accomplish this are designed to reinforce the significance of the prime factors, while minimizing any appearance of carrying actual message content.</p>
+
+					<p>To accomplish this containment, we start by interleaving the characters with five binary zero bits... which separates the meter blocks and calls more attention to the significance of the number 5.  There is an added benefit to padding out the 35-bit semiprime series with 5-bits to reach 40: each character unit fits exactly in 40 bits (5 bytes), for easier processing on computers which segment data into "byte" multiples of 8 bits.</p>
+
+					<p>Next we set up some surrounding empty space, called the "silence".  This is just a steady stream of 0 bits before the leading meter, and continuous 1 bits after the trailing meter.  Without the silence included in the message itself, then two consecutive USCII strings in memory (for instance) would have meter bumping up against each other...potentially obscuring the meaning of the meter length.  For meaningfulness in that case, we choose 7 "character-sized" 40-bit units of zero silence in the beginning, and 5 40-bit units of one silence in the end.</p>
 
 					<div id="binary_content"></div>
 
-					<p>There is an added benefit to padding out the 35-bit semiprime series with 5-bits to reach 40, and then using 40-bit sections again for the container of "silence".   Each character unit fits exactly in 40 bits (5 bytes) for easier processing on computers which process data in multiples of 8 bits.  So we could cleanly encode this in bytes, and hence hexadecimal.</p>
+					<p>Due to the careful size choices, we can cleanly encode this in bytes...and form it into the hexadecimal for the conversion.</p>
 
 					<p>If the recipients of the message are mathematically-minded, they'll be cued into noticing the importance of 5 and 7, and thus notice the 35-bit runs.  Since 35 is a semiprime number, it's only divisible by 5 and 7, hence it might lead them to decode it as a 5x7 bitmap.  See if your friends with geek-cred can figure it out, or send them <a href="decode.html">the decoder</a> if you are feeling generous. :)</p>						
 				</div>
