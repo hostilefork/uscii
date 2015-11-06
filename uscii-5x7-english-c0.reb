@@ -1032,7 +1032,7 @@ make-arecibo-ascii-table: function [
 
 		append arecibo-table make object! compose [
 			name: to string! to char! current-char			
-			bitstring: (if find bitstring "1" [bitstring])
+			bitstring: (either find bitstring "1" [bitstring] [none])
 		]
 		++ current-char
 	]
