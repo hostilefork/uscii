@@ -34,14 +34,14 @@ body {
     font-family: "Proxima Nova Regular","Helvetica Neue",Calibri,"Droid Sans",Helvetica,Arial,sans-serif;
     font-size: 16px;
     line-height: 1.5em;
-} 
+}
 
 #main {
     padding: 10px 32px 10px 32px;
     margin: 0px 20px 10px 20px;
 
     color: #333;
-	background-color: #FFF;
+    background-color: #FFF;
 }
 
 #header {
@@ -50,16 +50,16 @@ body {
 }
 
 #footer {
-	color: #888;
-	font-style: italic;
+    color: #888;
+    font-style: italic;
 }
 
 #loader_container {
-	text-align: center;
+    text-align: center;
 }
 
 
-/* 
+/*
  * Text areas do not inherit size automatically, you have to specify inherit.
  *
  * http://stackoverflow.com/questions/2874813/
@@ -69,36 +69,36 @@ textarea {
    font-family: inherit;
    font-size: inherit;
 }
- 
+
 .success, .warning, .error, .validation, .info {
-	border: 1px solid;
-	margin: 0px 0px;
-	padding:15px 15px 15px 15px;
+    border: 1px solid;
+    margin: 0px 0px;
+    padding:15px 15px 15px 15px;
 }
 .info {
-	color: #00529B;
-	background-color: #BDE5F8;
+    color: #00529B;
+    background-color: #BDE5F8;
 }
 .success {
-	color: #4F8A10;
-	background-color: #DFF2BF;
+    color: #4F8A10;
+    background-color: #DFF2BF;
 }
 .warning {
-	color: #9F6000;
-	background-color: #FEEFB3;
+    color: #9F6000;
+    background-color: #FEEFB3;
 }
 .error {
-	color: #D8000C;
-	background-color: #FFBABA;
+    color: #D8000C;
+    background-color: #FFBABA;
 }
 
 #conversion_content {
-	font-family: monospace;
-	font-weight: bold;
-	word-break: break-all;
+    font-family: monospace;
+    font-weight: bold;
+    word-break: break-all;
 }
 
 #binary_content {
-	font-family: monospace;
-	border: 1px solid lightgray;
+    font-family: monospace;
+    border: 1px solid lightgray;
 }
