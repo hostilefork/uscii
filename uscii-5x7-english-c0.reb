@@ -60,15 +60,15 @@ Rebol [
 
     Author: {Hostile Fork}
     Home: http://hostilefork.com/uscii/
-    License: 'mit
+    License: mit
 
     File: %uscii-5x7-english-c0.reb
     Date: 2-Feb-2014
     Version: 0.3.0
 
     ; Header conventions: http://www.rebol.org/one-click-submission-help.r
-    Type: 'fun
-    Level: 'intermediate
+    Type: fun
+    Level: intermediate
 
     Usage: {
         Just run the script using a Rebol interpreter.  Get one here:
