@@ -1219,7 +1219,7 @@ generate-all-image-files: function [
         foreach arecibo-object arecibo-table [
             if in arecibo-object 'bitstring [
                 image: make image! to pair! reduce [(5 * scale) (7 * scale)]
-                image/rgb: 255.255.0 ; make it easier to see mistakes in draw code as red
+                image/rgb: 255.0.0 ; make it easier to see mistakes in draw code as red
                 image/alpha: 255 ; make entire image opaque
                 image-index: 1
 
