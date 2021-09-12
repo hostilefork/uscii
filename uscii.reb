@@ -71,7 +71,7 @@ make-arecibo-ascii-table: function [
     ; NOTE: We decode all the data for kicks, but only use values for 0-127
     repeat 256 [
         if font-iter = tail font-data [
-            throw make error! "Too few bytes in 5x7 font data"
+            fail "Too few bytes in 5x7 font data"
         ]
 
         ; To make it easier to turn Arecibo ASCII into a picture of a letter
@@ -88,11 +88,6 @@ make-arecibo-ascii-table: function [
         ; 5 columns per character...
         repeat 5 [
             font-byte: first font-iter
-            ;
-            ; Note: "Redbol" emulation favors R3-Alpha/Red here, by making the
-            ; append of INTEGER! to BINARY! add the byte.  Rebol2 would add
-            ; the character, e.g. INTEGER! of 0 appends the ASCII for `0`.
-            ;
             font-byte-bits: enbase/base (append copy #{} font-byte) 2
 
             ; 7 meaningful row bits per character...
@@ -117,7 +112,7 @@ make-arecibo-ascii-table: function [
         current-char: current-char + 1
     ]
     if font-iter <> tail font-data [
-        throw make error! "Too many bytes in 5x7 font data"
+        fail "Too many bytes in 5x7 font data"
     ]
 
     ; So erase all the higher records we created
@@ -128,7 +123,7 @@ make-arecibo-ascii-table: function [
         print [{Processing override:} override-obj.name]
 
         if not in override-obj 'image [
-            throw make error! {No "image:" field in override}
+            fail {No "image:" field in override}
         ]
 
         bitstring: join text! override-obj.image
@@ -137,10 +132,10 @@ make-arecibo-ascii-table: function [
         print mold bitstring
 
         unless {01} == union {01} (sort unique bitstring) [
-            throw make error! "Override image may only contain ◼ and ▢"
+            fail "Override image may only contain ◼ and ▢"
         ]
         if (length of bitstring) <> (5 * 7) [
-            throw make error! "Override image not 5x7"
+            fail "Override image not 5x7"
         ]
 
         change (skip arecibo-table override-obj.code) make object! compose [
