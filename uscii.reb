@@ -28,7 +28,31 @@ Rebol [
 
 import <redbol>  ; Emulation of Rebol2/Red
 
-override-data: load %uscii-5x7-english-c0.reb
+override-data: uparse load %uscii-5x7-english-c0.reb [
+    collect [while keep ^ collect [
+        '===
+        [
+            abbr: set-word! (abbr: as text! abbr)
+            |
+            abbr: set-path! (abbr: as block! abbr)
+        ]
+        name: between <here> [code: into group! integer!]
+        '===
+
+        keep (lib.compose [
+            code: (code)
+            name: (spaced inert name)
+            abbr: (abbr)
+            image:  ; coming up...
+        ])
+
+        keep ^ collect 7 [w: word!, keep (as text! w)]
+
+        opt [keep ^ 'description:, keep text!]
+        opt [keep ^ 'notes:, keep text!]
+        opt [keep ^ 'rating:, keep ^ ^ word!]
+    ]]
+]
 
 ; 5x7 Character Font Code for PIC CPU Assemblers
 ; Taken from http://www.noritake-itron.com/Softview/fontspic.htm
@@ -184,11 +208,11 @@ make-arecibo-ascii-table: function [
         ]
 
         bitstring: rejoin override-obj/image
-        replace/all bitstring space "0"
-        replace/all bitstring "X" "1"
+        replace/all bitstring "▢" "0"
+        replace/all bitstring "◼" "1"
 
         unless {01} == union {01} (sort unique bitstring) [
-            throw make error! "Override image may only contain X and (space)"
+            throw make error! "Override image may only contain ◼ and ▢"
         ]
         if (length? bitstring) <> (5 * 7) [
             throw make error! "Override image not 5x7"
