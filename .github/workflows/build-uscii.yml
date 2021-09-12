@@ -1,0 +1,113 @@
+name: Build USCII Specification
+
+on:
+  push:
+    branches: [
+      master
+    ]
+  pull_request:
+    branches: [
+      master
+    ]
+  workflow_dispatch:  # Allows running this workflow manually from Actions tab
+
+
+jobs:
+  build-uscii:
+
+
+    # USCII Generation is short and quick enough to not be too much of a
+    # burden on the world, so go ahead and do run it for the release and debug
+    # builds on the main desktop platforms.
+    #
+    # (Rather than use the automatic-matrix'ing, we go ahead and list them
+    # manually, because that makes it easier to tweak specifics if desired.)
+    #
+    strategy:
+      matrix:
+        include:  # put in order of visibility importance (shown in UI)
+
+        - os: macos-latest
+          checked: false
+
+        - os: windows-latest
+          checked: false
+
+        - os: ubuntu-latest
+          checked: false
+
+        - os: macos-latest
+          checked: true
+
+        - os: windows-latest
+          checked: true
+
+        - os: ubuntu-latest
+          checked: true
+
+
+    # https://github.com/actions/virtual-environments#available-environments
+    #
+    runs-on: ${{ matrix.os }}
+
+
+    steps:
+
+
+  #====# CHECKOUT STEPS #=====================================================#
+
+
+    # GitHub CI checkout on Windows auto translates LF to CR/LF in files:
+    #
+    # https://github.com/actions/checkout/issues/135
+    #
+    # However, Ren-C is taking the long view on this and prohibiting CR/LF in
+    # source by default.
+    #
+    # https://forum.rebol.info/t/newlina-non-grata/1207
+    # https://forum.rebol.info/t/1264
+    #
+    - name: Disable LF to CRLF Auto Translation In Git
+      if: matrix.os == 'windows-latest'
+      run: |
+        git config --global core.autocrlf false
+        git config --global core.eol lf
+
+
+    # https://github.com/actions/checkout
+    #
+    - uses: actions/checkout@v2
+
+
+  #====# INSTALL R3 INTERPRETER #=============================================#
+
+    - name: Download and Cache the Interpreter
+      uses: metaeducation/ren-c-action@release
+      with:
+        checked: ${{ matrix.checked }}
+
+
+  #====# REN-C VERSION TEST STEPS #===========================================#
+
+    # Doing this properly would actually do more than just make sure running
+    # the script doesn't error, and make sure the graphics were correct
+    # against a known version.  Do that when time permits.
+
+    - name: Build USCII
+      run: |
+        r3 uscii.reb
+
+
+  #====# "REDBOL" VERSION TEST STEPS #========================================#
+
+    # The original Rebol version written circa 2008 ran in the pre-open-source
+    # "R3-Alpha" interpreter.  That less interesting version still runs today
+    # relatively unchanged under emulation via "Redbol", and is kept around as
+    # a test of that emulation.
+    #
+    - name: Historical Rebol Interpreter Test
+      uses: metaeducation/ren-c-action@release
+      with:
+        checked: ${{ matrix.checked }}
+        script: |
+          do %historical/uscii-old.reb
