@@ -31,30 +31,25 @@ scale-factors: [1 4]  ; Should be a parameter to the script
 
 === LOAD FONT AND OVERRIDE DATA ===
 
-override-data: uparse load %uscii-5x7-english-c0.reb [
-    collect [while keep ^ collect [
+override-list: uparse load %uscii-5x7-english-c0.reb [
+    collect [while keep gather [
         '===
-        [
-            abbr: set-word! (abbr: as text! abbr)
+        emit abbr: [
+            temp: set-word! (as text! temp)
             |
-            abbr: set-path! (abbr: as block! abbr)
+            temp: set-path! (as block! temp)
         ]
-        name: between <here> [code: into group! integer!]
+        emit name: between <here> [emit code: into group! integer!]
         '===
 
-        keep (compose [
-            code: (code)
-            name: (spaced inert name)
-            abbr: (abbr)
-            image:  ; coming up...
-        ])
+        emit image: collect 7 [w: word!, keep (as text! w)]
 
-        keep ^ collect 7 [w: word!, keep (as text! w)]
-
-        opt [keep ^ 'description:, keep text!]
-        opt [keep ^ 'notes:, keep text!]
-        opt [keep ^ 'rating:, keep ^ ^ word!]
+        opt ['description:, emit description: text!]
+        opt ['notes:, emit notes: text!]
+        opt ['rating:, emit rating: ^ word!]
     ]]
+] else [
+    fail ["Could not parse %uscii-5x7-english-c0.reb"]
 ]
 
 font-data: load-value %pic-cpu-5x7-font.reb
@@ -116,15 +111,10 @@ if font-iter <> tail font-data [
 ; So erase all the higher records we created
 remove/part (skip arecibo-table 128) (tail arecibo-table)
 
-for-each override-block override-data [
-    override-obj: make object! override-block
-    print [{Processing override:} override-obj.name]
+for-each override override-list [
+    print [{Processing override:} override.name]
 
-    if not in override-obj 'image [
-        fail {No "image:" field in override}
-    ]
-
-    bitstring: join text! override-obj.image
+    bitstring: join text! override.image
     replace/all bitstring "▢" "0"
     replace/all bitstring "◼" "1"
     print mold bitstring
@@ -136,8 +126,8 @@ for-each override-block override-data [
         fail "Override image not 5x7"
     ]
 
-    change (skip arecibo-table override-obj.code) make object! compose [
-        name: override-obj.name
+    change (skip arecibo-table override.code) make object! compose [
+        name: override.name
         bitstring: (bitstring)
     ]
 ]
