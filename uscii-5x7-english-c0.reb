@@ -109,6 +109,7 @@ Rebol [
     ]
 ]
 
+import <redbol.reb>  ; Emulation of Rebol2/Red
 
 override-data: [
     ; Overridden characters in Arecibo ASCII-35 standard
@@ -1016,7 +1017,13 @@ make-arecibo-ascii-table: function [
         ; 5 columns per character...
         loop 5 [
             font-byte: first font-iter
+            ;
+            ; Note: "Redbol" emulation favors R3-Alpha/Red here, by making the
+            ; append of INTEGER! to BINARY! add the byte.  Rebol2 would add
+            ; the character, e.g. INTEGER! of 0 appends the ASCII for `0`.
+            ;
             font-byte-bits: enbase/base (append copy #{} font-byte) 2
+
             ; 7 meaningful row bits per character...
             repeat bit-index 7 [
                 append (pick row-major-bits bit-index) (pick font-byte-bits bit-index)
@@ -1031,10 +1038,12 @@ make-arecibo-ascii-table: function [
         ; besides space (which is an override)
 
         append arecibo-table make object! compose [
-            name: to string! to char! current-char
+            name: either current-char = 0 ["(NUL)"] [
+                to string! to char! current-char
+            ]
             bitstring: (either find bitstring "1" [bitstring] [none])
         ]
-        ++ current-char
+        current-char: current-char + 1
     ]
     if font-iter <> tail font-data [
         throw make error! "Too many bytes in 5x7 font data"
@@ -1144,7 +1153,7 @@ generate-html-table: function [
             <td> arecibo-object/bitstring </td>
             </tr>
         ]
-        ++ current-char
+        current-char: current-char + 1
     ]
     append lines </tbody>
     append lines </table>
@@ -1184,7 +1193,7 @@ generate-javascript-table: function [
             either lastChar? [space] [{,}]
             space "//" space "(" to integer! current-char ")" {:} space arecibo-object/name
         ]
-        ++ current-char
+        current-char: current-char + 1
     ]
     append lines rejoin ["];"]
 
@@ -1239,11 +1248,11 @@ generate-all-image-files: function [
                         scale scale
                     ]
 
-                    ++ image-index
-                    ++ all-images-index
-                    ++ bit-column
+                    image-index: image-index + 1
+                    all-images-index: all-images-index + 1
+                    bit-column: bit-column + 1
                     if bit-column == 5 [
-                        ++ bit-row
+                        bit-row: bit-row + 1
                         bit-column: 0
                     ]
                 ]
@@ -1251,7 +1260,7 @@ generate-all-image-files: function [
                 print [{Writing} arecibo-object/bitstring {to:} clean-path filename]
                 save filename image
             ]
-            ++ current-char
+            current-char: current-char + 1
         ]
 
         all-images-filename: to file! reduce [scale-dir "all.png"]
@@ -1261,7 +1270,7 @@ generate-all-image-files: function [
         ; The condition of "all bits set" is reserved for setting up the "meter",
         ; e.g. helping to hint at the significance of the 35 bit pattern.  This
         ; cannot be used inside of the signal.
-        meter-image: make image! [5x7]
+        meter-image: make image! 5x7
         image/alpha: 0 ; set all image opaque
         image/rgb: 0.0.0 ; set all image black
         meter-image-file: to file! reduce [scale-dir "meter.png"]
