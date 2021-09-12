@@ -8,8 +8,8 @@ Rebol [
     License: mit
 
     File: %uscii.reb
-    Date: 2-Feb-2014
-    Version: 0.3.0
+    Date: 12-Sep-2021
+    Version: 0.4.0
 
     ; Header conventions: http://www.rebol.org/one-click-submission-help.r
     Type: fun
@@ -25,8 +25,6 @@ Rebol [
             * a Javascript version of the table for using in programs
     }
 ]
-
-import <redbol>  ; Emulation of Rebol2/Red
 
 override-data: uparse load %uscii-5x7-english-c0.reb [
     collect [while keep ^ collect [
@@ -145,7 +143,7 @@ make-arecibo-ascii-table: function [
     font-iter: head font-data
 
     ; NOTE: We decode all the data for kicks, but only use values for 0-127
-    loop 256 [
+    repeat 256 [
         if font-iter = tail font-data [
             throw make error! "Too few bytes in 5x7 font data"
         ]
@@ -157,12 +155,12 @@ make-arecibo-ascii-table: function [
         ;    http://en.wikipedia.org/wiki/Row-major_order
         ;
         row-major-bits: copy []
-        loop 7 [
+        repeat 7 [
             append row-major-bits copy {}
         ]
 
         ; 5 columns per character...
-        loop 5 [
+        repeat 5 [
             font-byte: first font-iter
             ;
             ; Note: "Redbol" emulation favors R3-Alpha/Red here, by making the
@@ -172,23 +170,23 @@ make-arecibo-ascii-table: function [
             font-byte-bits: enbase/base (append copy #{} font-byte) 2
 
             ; 7 meaningful row bits per character...
-            repeat bit-index 7 [
+            count-up bit-index 7 [
                 append (pick row-major-bits bit-index) (pick font-byte-bits bit-index)
             ]
 
             font-iter: next font-iter
         ]
 
-        bitstring: rejoin row-major-bits
+        bitstring: join text! row-major-bits
 
         ; do not insert any empty bitstrings, we need pictures for everything
         ; besides space (which is an override)
 
         append arecibo-table make object! compose [
             name: either current-char = 0 ["(NUL)"] [
-                to string! to char! current-char
+                to text! make char! current-char
             ]
-            bitstring: (either find bitstring "1" [bitstring] [none])
+            bitstring: (either find bitstring "1" [bitstring] ['~empty~])
         ]
         current-char: current-char + 1
     ]
@@ -199,22 +197,23 @@ make-arecibo-ascii-table: function [
     ; So erase all the higher records we created
     remove/part (skip arecibo-table 128) (tail arecibo-table)
 
-    foreach override-block override-data [
+    for-each override-block override-data [
         override-obj: make object! override-block
         print [{Processing override:} override-obj.name]
 
-        unless in override-obj 'image [
+        if not in override-obj 'image [
             throw make error! {No "image:" field in override}
         ]
 
-        bitstring: rejoin override-obj.image
+        bitstring: join text! override-obj.image
         replace/all bitstring "▢" "0"
         replace/all bitstring "◼" "1"
+        print mold bitstring
 
         unless {01} == union {01} (sort unique bitstring) [
             throw make error! "Override image may only contain ◼ and ▢"
         ]
-        if (length? bitstring) <> (5 * 7) [
+        if (length of bitstring) <> (5 * 7) [
             throw make error! "Override image not 5x7"
         ]
 
@@ -235,29 +234,23 @@ make-header: function [
     start-comment
     end-comment
 ] [
-    reform [
+    spaced [
         start-comment
-        reform [
-            "Generated with"
-            system.script.header.file
-            "version"
-            system.script.header.version
-        ]
+        "Generated with"
+        system.script.header.file
+        "version"
+        system.script.header.version
         end-comment
         newline
 
         start-comment
-        reform [
-            "See:" system.script.header.home
-        ]
+        "See:" system.script.header.home
         end-comment
         newline
 
         start-comment
-        reform [
-            "WARNING: THIS IS A WORKING DRAFT AS OF"
-            system.script.header.date
-        ]
+        "WARNING: THIS IS A WORKING DRAFT AS OF"
+        system.script.header.date
         end-comment
         newline
 
@@ -280,7 +273,7 @@ generate-html-table: function [
     append lines <!-- HTML format of Arecibo ASCII Table -->
     append lines make-header "<!--" "-->"
     append lines <table>
-    append lines reform [
+    append lines [
         <thead>
         <tr>
         <td> <b> {ASCII} </b> </td>
@@ -292,8 +285,8 @@ generate-html-table: function [
 
     append lines <tbody>
     current-char: 0
-    foreach arecibo-object arecibo-table [
-        append lines reform [
+    for-each arecibo-object arecibo-table [
+        append lines [
             <tr>
             <td> to integer! current-char </td>
             <td> arecibo-object.name </td>
@@ -321,7 +314,7 @@ generate-javascript-table: function [
     append lines make-header "/*" "*/"
     append lines "var AreciboAscii = {};"
 
-    foreach blk [
+    for-each blk [
         [{AreciboAscii["name"] = } {"} {USCII-5x7-ENGLISH-C0} {"} {;}]
         [{AreciboAscii["version"] = } {"} system.script.header.version {"} {;}]
         [{AreciboAscii["date"] = } space {"} system.script.header.date {"} {;}]
@@ -329,12 +322,12 @@ generate-javascript-table: function [
         [{AreciboAscii["height"] = } space 7 {;}]
         [{AreciboAscii["bitstrings"] = } space "["]
     ] [
-        append lines rejoin blk
+        append lines unspaced blk
     ]
     current-char: 0
-    foreach arecibo-object arecibo-table [
+    for-each arecibo-object arecibo-table [
         lastChar?: current-char = ((length? arecibo-table) - 1)
-        append lines rejoin [
+        append lines unspaced [
             tab
             {"} arecibo-object.bitstring {"}
             either lastChar? [space] [{,}]
@@ -342,7 +335,7 @@ generate-javascript-table: function [
         ]
         current-char: current-char + 1
     ]
-    append lines rejoin ["];"]
+    append lines "];"
 
     write/lines filename lines
 ]
@@ -359,9 +352,9 @@ generate-all-image-files: function [
     directory
     scale-factors [block!] {block of integers for scale factors to be generated}
 ] [
-    foreach scale scale-factors [
+    for-each scale scale-factors [
         print ["Generating images for scale factor:" scale]
-        scale-dir: to file! rejoin [directory "x" to string! scale "/"]
+        scale-dir: join directory reduce ["x" to text! scale "/"]
 
         if not exists? scale-dir [
             make-dir/deep scale-dir
@@ -372,7 +365,7 @@ generate-all-image-files: function [
         all-images-index: 1
 
         current-char: 0
-        foreach arecibo-object arecibo-table [
+        for-each arecibo-object arecibo-table [
             if in arecibo-object 'bitstring [
                 image: make image! to pair! reduce [(5 * scale) (7 * scale)]
                 image.rgb: 255.0.0  ; red to make it easier to see mistakes
@@ -381,7 +374,7 @@ generate-all-image-files: function [
 
                 bit-row: 0
                 bit-column: 0
-                foreach bit arecibo-object.bitstring [
+                for-each bit arecibo-object.bitstring [
                     color: either bit == #"1" [0.0.0] [255.255.255]
                     change/dup skip image (to pair! reduce [
                         (bit-column * scale) (bit-row * scale)
@@ -403,7 +396,7 @@ generate-all-image-files: function [
                         bit-column: 0
                     ]
                 ]
-                filename: to file! rejoin [scale-dir current-char {.png}]
+                filename: join scale-dir reduce [current-char {.png}]
                 print [{Writing} arecibo-object.bitstring {to:} clean-path filename]
                 save filename image
             ]
@@ -428,7 +421,7 @@ generate-all-image-files: function [
 
 
 print-output-separator: function [] [
-    print rejoin [
+    print [
         newline
         newline
         {----------}
@@ -449,24 +442,24 @@ print-arecibo-ascii-table: function [
 
     print-output-separator
 
-    generate-all-image-files arecibo-table rejoin [system.options.path %/build/images/5x7/] [1 4]
+    generate-all-image-files arecibo-table (join system.options.path %build/images/5x7/) [1 4]
 
     print "Outputting HTML table"
 
-    generate-html-table rejoin [system.options.path %build/uscii-5x7-english-c0.html] arecibo-table
+    generate-html-table (join system.options.path %build/uscii-5x7-english-c0.html) arecibo-table
 
     print-output-separator
 
     print "Outputting JavaScript table"
 
-    generate-javascript-table rejoin [system.options.path %build/uscii-5x7-english-c0.js] arecibo-table
+    generate-javascript-table (join system.options.path %build/uscii-5x7-english-c0.js) arecibo-table
 
     print-output-separator
 
     current-char: 0
-    foreach arecibo-object arecibo-table [
+    for-each arecibo-object arecibo-table [
         if not (in arecibo-object 'bitstring) [
-            print rejoin [
+            print [
                 "WARNING - No bitstring defined for "
                 "(" current-char "):" space arecibo-object.name
             ]
