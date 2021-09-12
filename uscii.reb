@@ -201,13 +201,13 @@ make-arecibo-ascii-table: function [
 
     foreach override-block override-data [
         override-obj: make object! override-block
-        print [{Processing override:} override-obj/name]
+        print [{Processing override:} override-obj.name]
 
         unless in override-obj 'image [
             throw make error! {No "image:" field in override}
         ]
 
-        bitstring: rejoin override-obj/image
+        bitstring: rejoin override-obj.image
         replace/all bitstring "▢" "0"
         replace/all bitstring "◼" "1"
 
@@ -218,8 +218,8 @@ make-arecibo-ascii-table: function [
             throw make error! "Override image not 5x7"
         ]
 
-        change (skip arecibo-table override-obj/code) make object! compose [
-            name: override-obj/name
+        change (skip arecibo-table override-obj.code) make object! compose [
+            name: override-obj.name
             bitstring: (bitstring)
         ]
     ]
@@ -239,16 +239,16 @@ make-header: function [
         start-comment
         reform [
             "Generated with"
-            system/script/header/file
+            system.script.header.file
             "version"
-            system/script/header/version
+            system.script.header.version
         ]
         end-comment
         newline
 
         start-comment
         reform [
-            "See:" system/script/header/home
+            "See:" system.script.header.home
         ]
         end-comment
         newline
@@ -256,7 +256,7 @@ make-header: function [
         start-comment
         reform [
             "WARNING: THIS IS A WORKING DRAFT AS OF"
-            system/script/header/date
+            system.script.header.date
         ]
         end-comment
         newline
@@ -296,8 +296,8 @@ generate-html-table: function [
         append lines reform [
             <tr>
             <td> to integer! current-char </td>
-            <td> arecibo-object/name </td>
-            <td> arecibo-object/bitstring </td>
+            <td> arecibo-object.name </td>
+            <td> arecibo-object.bitstring </td>
             </tr>
         ]
         current-char: current-char + 1
@@ -323,8 +323,8 @@ generate-javascript-table: function [
 
     foreach blk [
         [{AreciboAscii["name"] = } {"} {USCII-5x7-ENGLISH-C0} {"} {;}]
-        [{AreciboAscii["version"] = } {"} system/script/header/version {"} {;}]
-        [{AreciboAscii["date"] = } space {"} system/script/header/date {"} {;}]
+        [{AreciboAscii["version"] = } {"} system.script.header.version {"} {;}]
+        [{AreciboAscii["date"] = } space {"} system.script.header.date {"} {;}]
         [{AreciboAscii["width"] = } space 5 {;}]
         [{AreciboAscii["height"] = } space 7 {;}]
         [{AreciboAscii["bitstrings"] = } space "["]
@@ -336,9 +336,9 @@ generate-javascript-table: function [
         lastChar?: current-char = ((length? arecibo-table) - 1)
         append lines rejoin [
             tab
-            {"} arecibo-object/bitstring {"}
+            {"} arecibo-object.bitstring {"}
             either lastChar? [space] [{,}]
-            space "//" space "(" to integer! current-char ")" {:} space arecibo-object/name
+            space "//" space "(" to integer! current-char ")" {:} space arecibo-object.name
         ]
         current-char: current-char + 1
     ]
@@ -368,20 +368,20 @@ generate-all-image-files: function [
         ]
 
         all-images: make image! to pair! reduce [5 * scale ((length? arecibo-table) * 7) * scale]
-        all-images/alpha: 255 ; make entire image opaque
+        all-images.alpha: 255  ; make entire image opaque
         all-images-index: 1
 
         current-char: 0
         foreach arecibo-object arecibo-table [
             if in arecibo-object 'bitstring [
                 image: make image! to pair! reduce [(5 * scale) (7 * scale)]
-                image/rgb: 255.0.0 ; make it easier to see mistakes in draw code as red
-                image/alpha: 255 ; make entire image opaque
+                image.rgb: 255.0.0  ; red to make it easier to see mistakes
+                image.alpha: 255  ; make entire image opaque
                 image-index: 1
 
                 bit-row: 0
                 bit-column: 0
-                foreach bit arecibo-object/bitstring [
+                foreach bit arecibo-object.bitstring [
                     color: either bit == #"1" [0.0.0] [255.255.255]
                     change/dup skip image (to pair! reduce [
                         (bit-column * scale) (bit-row * scale)
@@ -404,7 +404,7 @@ generate-all-image-files: function [
                     ]
                 ]
                 filename: to file! rejoin [scale-dir current-char {.png}]
-                print [{Writing} arecibo-object/bitstring {to:} clean-path filename]
+                print [{Writing} arecibo-object.bitstring {to:} clean-path filename]
                 save filename image
             ]
             current-char: current-char + 1
@@ -418,8 +418,8 @@ generate-all-image-files: function [
         ; e.g. helping to hint at the significance of the 35 bit pattern.  This
         ; cannot be used inside of the signal.
         meter-image: make image! 5x7
-        image/alpha: 0 ; set all image opaque
-        image/rgb: 0.0.0 ; set all image black
+        image.alpha: 0  ; set all image opaque
+        image.rgb: 0.0.0  ; set all image black
         meter-image-file: to file! reduce [scale-dir "meter.png"]
         print [{Writing meter to:} clean-path meter-image-file]
         save meter-image-file meter-image
@@ -449,17 +449,17 @@ print-arecibo-ascii-table: function [
 
     print-output-separator
 
-    generate-all-image-files arecibo-table rejoin [system/options/path %/build/images/5x7/] [1 4]
+    generate-all-image-files arecibo-table rejoin [system.options.path %/build/images/5x7/] [1 4]
 
     print "Outputting HTML table"
 
-    generate-html-table rejoin [system/options/path %build/uscii-5x7-english-c0.html] arecibo-table
+    generate-html-table rejoin [system.options.path %build/uscii-5x7-english-c0.html] arecibo-table
 
     print-output-separator
 
     print "Outputting JavaScript table"
 
-    generate-javascript-table rejoin [system/options/path %build/uscii-5x7-english-c0.js] arecibo-table
+    generate-javascript-table rejoin [system.options.path %build/uscii-5x7-english-c0.js] arecibo-table
 
     print-output-separator
 
@@ -468,7 +468,7 @@ print-arecibo-ascii-table: function [
         if not (in arecibo-object 'bitstring) [
             print rejoin [
                 "WARNING - No bitstring defined for "
-                "(" current-char "):" space arecibo-object/name
+                "(" current-char "):" space arecibo-object.name
             ]
         ]
         current-char: current-char + 1
