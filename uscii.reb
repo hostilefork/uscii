@@ -32,12 +32,12 @@ scale-factors: [1 4]  ; Should be a parameter to the script
 === LOAD FONT AND OVERRIDE DATA ===
 
 override-list: uparse load %uscii-5x7-english-c0.reb [
-    collect [while keep gather [
+    collect [some keep gather [
         '===
         emit abbr: [
-            temp: set-word! (as text! temp)
+            temp: set-word! (as text! temp)  ; e.g. `LF`
             |
-            temp: set-path! (as block! temp)
+            temp: set-path! (as block! temp)  ; e.g. `DC1/XON`
         ]
         emit name: between <here> [emit code: into group! integer!]
         '===
