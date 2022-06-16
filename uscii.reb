@@ -157,7 +157,7 @@ make-header: function [
     start-comment {either `/*` if JavaScript, or `<!--` if HTML}
     end-comment {either `*/` if JavaScript, or `-->` if HTML}
 ][
-    spaced [
+    return spaced [
         start-comment
         "Generated with"
         system.script.header.file
