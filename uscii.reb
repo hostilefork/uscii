@@ -32,22 +32,22 @@ scale-factors: [1 4]  ; Should be a parameter to the script
 === LOAD FONT AND OVERRIDE DATA ===
 
 override-list: uparse load %uscii-5x7-english-c0.reb [
-    collect [some keep gather [
+    collect some keep gather [
         '===
-        emit abbr: [
+        emit abbreviation: [
             temp: set-word! (as text! temp)  ; e.g. `LF`
             |
             temp: set-path! (as block! temp)  ; e.g. `DC1/XON`
         ]
-        emit name: between <here> [emit code: into group! integer!]
+        emit name: between <here> [emit code: subparse group! integer!]
         '===
 
         emit image: collect 7 [w: word!, keep (as text! w)]
 
-        opt ['description:, emit description: text!]
-        opt ['notes:, emit notes: text!]
-        opt ['rating:, emit rating: ^ word!]
-    ]]
+        maybe ['description:, emit description: text!]
+        maybe ['notes:, emit notes: text!]
+        maybe ['rating:, emit rating: word!]
+    ]
 ] else [
     fail ["Could not parse %uscii-5x7-english-c0.reb"]
 ]
