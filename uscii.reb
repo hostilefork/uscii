@@ -31,7 +31,7 @@ scale-factors: [1 4]  ; Should be a parameter to the script
 
 === LOAD FONT AND OVERRIDE DATA ===
 
-override-list: uparse load %uscii-5x7-english-c0.reb [
+override-list: parse load %uscii-5x7-english-c0.reb [
     collect some keep gather [
         '===
         emit abbreviation: [
