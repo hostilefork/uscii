@@ -42,7 +42,7 @@ override-list: parse load %uscii-5x7-english-c0.reb [
         emit name: between <here> [emit code: subparse group! integer!]
         '===
 
-        emit image: collect 7 [w: word!, keep (as text! w)]
+        emit image: collect repeat 7 [w: word!, keep (as text! w)]
 
         maybe ['description:, emit description: text!]
         maybe ['notes:, emit notes: text!]
