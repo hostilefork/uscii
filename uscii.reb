@@ -91,7 +91,7 @@ repeat 256 [
         font-iter: next font-iter
     ]
 
-    bitstring: join text! row-major-bits
+    bitstring: to text! row-major-bits
 
     ; do not insert any empty bitstrings, we need pictures for everything
     ; besides space (which is an override)
@@ -114,7 +114,7 @@ remove/part (skip arecibo-table 128) (tail arecibo-table)
 for-each override override-list [
     print [{Processing override:} override.name]
 
-    bitstring: join text! override.image
+    bitstring: to text! override.image
     replace/all bitstring "▢" "0"
     replace/all bitstring "◼" "1"
     print mold bitstring
@@ -198,7 +198,7 @@ directory: join system.options.path %build/images/5x7/
 
 for-each scale scale-factors [
     print ["Generating images for scale factor:" scale]
-    scale-dir: join directory reduce ["x" to text! scale "/"]
+    scale-dir: join directory spread reduce ["x" to text! scale "/"]
 
     if not exists? scale-dir [
         make-dir/deep scale-dir
@@ -240,7 +240,7 @@ for-each scale scale-factors [
                     bit-column: 0
                 ]
             ]
-            filename: join scale-dir reduce [current-char {.png}]
+            filename: join scale-dir spread reduce [current-char {.png}]
             print [{Writing} arecibo-object.bitstring {to:} clean-path filename]
             save filename image
         ]
